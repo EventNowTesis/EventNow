@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar evento · EventNow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+          rel="stylesheet">
+
+    <style>
+
+        :root {
+            --tinta: #17242A;
+            --papel: #F1ECDE;
+            --papel-alto: #FBF8EF;
+            --ambar: #E4A72E;
+            --coral: #D65A46;
+            --salvia: #6E8F7A;
+            --linea: rgba(23,36,42,0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--papel);
+            color: var(--tinta);
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .envoltura {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 28px;
+        }
+
+        .tarjeta-form {
+            background: var(--papel-alto);
+            border: 1px solid var(--linea);
+            border-radius: 20px;
+            padding: 32px;
+        }
+
+        .grupo-campo {
+            margin-bottom: 20px;
+        }
+
+        .separador-seccion {
+            border: none;
+            border-top: 1px solid var(--linea);
+            margin: 28px 0;
+        }
+
+        .titulo-seccion {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 0 0 16px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="time"],
+        input[type="email"],
+        input[type="file"],
+        textarea,
+        select {
+
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--linea);
+            background: var(--papel);
+            font-family: 'Inter', sans-serif;
+            font-size: 14.5px;
+            color: var(--tinta);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 110px;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--tinta);
+            background: white;
+        }
+
+        .imagen-actual {
+            font-size: 13px;
+            color: var(--tinta);
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        .botones {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 12px 20px;
+            border-radius: 9px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-guardar {
+            background: var(--tinta);
+            color: white;
+        }
+
+        .btn-cancelar {
+            background: transparent;
+            color: var(--tinta);
+            border: 1px solid var(--linea);
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="envoltura">
+    <h1>Editar evento</h1>
+    <div class="tarjeta-form">
+        <form action="index.php?slug=editar_evento" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="id_evento" value="{ID_EVENTO}">
+            <div class="grupo-campo">
+                <label for="titulo">Título del evento</label>
+                <input type="text" id="titulo" name="titulo" value="{TITULO}" required>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" required>{DESCRIPCION}</textarea>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="fecha">Fecha</label>
+                <input type="date" id="fecha" name="fecha" value="{FECHA}" required>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="hora">Hora</label>
+                <input type="time" id="hora" name="hora" value="{HORA}" required>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="categoria">Categoría</label>
+                <select name="categoria" id="categoria" required>
+                    <option value="musica" {MUSICA}>
+                        Música
+                    </option>
+
+                    <option value="deporte" {DEPORTE}>
+                        Deporte
+                    </option>
+
+                    <option value="feria" {FERIA}>
+                        Ferias
+                    </option>
+
+                    <option value="arte" {ARTE}>
+                        Arte y cultura
+                    </option>
+
+                    <option value="gastronomia" {GASTRONOMIA}>
+                        Gastronomía
+                    </option>
+
+                    <option value="tecnologia" {TECNOLOGIA}>
+                        Tecnología
+                    </option>
+
+                    <option value="otro" {OTRO}>
+                        Otro
+                    </option>
+                </select>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="ubicacion">Ubicación</label>
+                <input type="text" id="ubicacion" name="ubicacion" value="{ZONA}" required >
+            </div>
+
+            <div class="grupo-campo">
+                <label for="imagen">Imagen o video (opcional, dejalo vacío para mantener el actual)</label>
+                <input type="file" id="imagen" name="imagen" accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.webm,.avi,.mkv">
+
+            </div>
+
+            <hr class="separador-seccion">
+            <h2 class="titulo-seccion">Contacto del organizador</h2>
+            <div class="grupo-campo">
+                <label for="contacto_email">Email de contacto</label>
+                <input type="email" id="contacto_email" name="contacto_email" value="{CONTACTO_EMAIL}">
+
+            </div>
+            <div class="grupo-campo">
+                <label for="contacto_telefono">Teléfono de contacto</label>
+                <input type="text" id="contacto_telefono" name="contacto_telefono" value="{CONTACTO_TELEFONO}">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="contacto_instagram">Instagram</label>
+                <input type="text" id="contacto_instagram" name="contacto_instagram" value="{CONTACTO_INSTAGRAM}">
+            </div>
+            <div class="grupo-campo">
+
+                <label for="contacto_web">Sitio web</label>
+                <input type="text" id="contacto_web" name="contacto_web" value="{CONTACTO_WEB}">
+            </div>
+
+            <hr class="separador-seccion">
+            <h2 class="titulo-seccion">Información útil</h2>
+            <div class="grupo-campo">
+                <label for="info_apto">Apto para</label>
+                <select id="info_apto" name="info_apto">
+                    <option value="" {INFO_APTO_SIN_ESPECIFICAR_SELECTED}>—</option>
+                    <option value="Todo público" {INFO_APTO_TODO_PUBLICO_SELECTED}>Todo público</option>
+                    <option value="Mayores de 18" {INFO_APTO_MAYORES_18_SELECTED}>Mayores de 18</option>
+                    <option value="Familiar / niños" {INFO_APTO_FAMILIAR_NINOS_SELECTED}>Familiar / niños</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="info_duracion">Duración</label>
+
+                <input type="text" id="info_duracion" name="info_duracion" value="{INFO_DURACION}">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="info_capacidad">Capacidad</label>
+                <input type="text" id="info_capacidad" name="info_capacidad" value="{INFO_CAPACIDAD}">
+            </div>
+
+            <div class="grupo-campo">
+                <label for="info_accesibilidad">Accesibilidad</label>
+
+                <select id="info_accesibilidad" name="info_accesibilidad">
+                    <option value="" {INFO_ACCESIBILIDAD_SIN_ESPECIFICAR_SELECTED}>—</option>
+                    <option value="Acceso para sillas de ruedas" {INFO_ACCESIBILIDAD_SILLAS_RUEDAS_SELECTED}>Acceso para sillas de ruedas</option>
+                    <option value="Sin acceso adaptado" {INFO_ACCESIBILIDAD_SIN_ACCESO_SELECTED}>Sin acceso adaptado</option>
+                </select>
+            </div>
+
+            <div class="grupo-campo">
+                <label for="info_mascotas">Mascotas</label>
+
+                <select id="info_mascotas" name="info_mascotas">
+                    <option value="" {INFO_MASCOTAS_SIN_ESPECIFICAR_SELECTED}>—</option>
+                    <option value="Bienvenidas con correa" {INFO_MASCOTAS_BIENVENIDAS_SELECTED}>Bienvenidas con correa</option>
+                    <option value="No se permiten mascotas" {INFO_MASCOTAS_NO_PERMITIDAS_SELECTED}>No se permiten mascotas</option>
+                </select>
+            </div>
+
+            <hr class="separador-seccion">
+
+            <div class="grupo-campo">
+                <label for="adicional">
+                    A tener en cuenta
+                </label>
+                <textarea id="adicional" name="adicional">{ADICIONAL}</textarea>
+            </div>
+            <div class="botones">
+
+                <button type="submit" name="btn_editar" class="btn btn-guardar">
+                    Guardar cambios
+                </button>
+                <a href="index.php?slug=panel" class="btn btn-cancelar"> Cancelar </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+
+    <script src="./../controllers/mapa.js"></script>
+
+</body>
+
+</html>

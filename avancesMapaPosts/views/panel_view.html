@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel · EventNow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      :root {
+        --bg-warm: #FAF8F5;
+        --bg-surface: #FFFFFF;
+        --bg-surface-hover: #F3EFEA;
+
+        --text-main: #1A1A1A;
+        --text-muted: #666666;
+
+        --primary-color: #17242A;
+        --primary-hover: #2b3c43;
+
+        --accent-color: #A0522D;
+
+        --danger-color: #D65A46;
+
+        --border-color: #EAE6E1;
+        --radius: 14px;
+        --shadow: 0 4px 12px rgba(0,0,0,0.06);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        min-height: 100vh;
+        background-color: var(--bg-warm);
+        color: var(--text-main);
+        font-family: -apple-system, "Segoe UI", Arial, sans-serif;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .contenedor {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+
+      /* HEADER NAV / ACCIONES */
+      .cabecera {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        background: var(--bg-surface);
+        padding: 1rem 1.5rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+      }
+
+      .cabecera h1 {
+        font-size: 1.5rem;
+      }
+
+      .acciones {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      .acciones a {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-main);
+      }
+
+      .acciones a.btn-logout {
+        background: rgba(214, 90, 70, 0.12);
+        color: var(--danger-color);
+        border: 1px solid rgba(214, 90, 70, 0.35);
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        transition: background 0.15s ease;
+      }
+
+      .acciones a.btn-logout:hover {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      /* SECCIÓN DE PERFIL DE USUARIO */
+      .profile-card {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        background: var(--bg-surface);
+        padding: 2rem;
+        border-radius: var(--radius);
+        border: 1px solid var(--border-color);
+        margin-bottom: 2.5rem;
+      }
+
+      .profile-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--bg-surface-hover);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        color: #A9A9A9;
+        flex-shrink: 0;
+      }
+
+      .profile-info h2 {
+        font-size: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+      }
+
+      .profile-info .email {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .profile-info .username {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 2px;
+      }
+
+      .role-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        background: var(--bg-surface-hover);
+        padding: 4px 12px;
+        border-radius: 20px;
+        color: var(--text-main);
+        font-weight: 700;
+      }
+
+      /* EVENTOS */
+      .seccion-titulo {
+        font-size: 1.3rem;
+        margin-bottom: 1.2rem;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .eventos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .evento {
+        background: var(--bg-surface);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .evento h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: var(--text-main);
+      }
+
+      .evento p {
+        color: var(--text-muted);
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .evento img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .botones-evento {
+        margin-top: auto;
+        display: flex;
+        gap: 0.5rem;
+        padding-top: 0.8rem;
+        border-top: 1px solid var(--border-color);
+      }
+
+      .botones-evento a {
+        flex: 1;
+        text-align: center;
+        padding: 0.5rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .botones-evento a:first-child {
+        background: var(--bg-surface-hover);
+        color: var(--text-main);
+      }
+
+      .botones-evento a:last-child {
+        background: rgba(214, 90, 70, 0.12);
+        color: var(--danger-color);
+      }
+
+      .botones-evento a:last-child:hover {
+        background: var(--danger-color);
+        color: white;
+      }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+
+        <div class="cabecera">
+            <h1>Panel de Control</h1>
+            <div class="acciones">
+                <a href="index.php?slug=posts"><i class="fa-solid fa-plus"></i> Crear evento</a>
+                <a href="index.php?slug=landing"><i class="fa-solid fa-eye"></i> Ver eventos</a>
+                <a href="index.php?slug=logout" class="btn-logout" onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+                </a>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Perfil de Usuario -->
+        <div class="profile-card">
+            <div class="profile-avatar">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="profile-info">
+                <h2>{USUARIO_NOMBRE} <span class="role-badge">{USUARIO_ROL}</span></h2>
+                <p class="email"><i class="fa-regular fa-envelope"></i> {USUARIO_EMAIL}</p>
+                <p class="username">@{USUARIO_USER}</p>
+            </div>
+        </div>
+
+        <h3 class="seccion-titulo">Mis Eventos</h3>
+        <h3 class="seccion-titulo">Mis eventos pendientes</h3>
+
+        <div class="eventos">
+            {EVENTOS}
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #F1ECDE;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .contenedor {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .acciones a {
+            margin-left: 10px;
+            text-decoration: none;
+            padding: 10px 15px;
+            background: #17242A;
+            color: white;
+            border-radius: 8px;
+        }
+
+        .eventos {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .evento {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .evento img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .evento h2 {
+            margin-top: 0;
+        }
+
+    </style>
+
+</head>
+<body>
+    
+    <div class="contenedor">
+
+    <div class="cabecera">
+
+        <h1>Bienvenido al perfil</h1>
+
+        <div class="acciones">
+
+            <a href="../controllers/panel_controller.php">
+                Ver eventos
+            </a>
+
+            <a href="../controllers/logout_controller.php"
+   onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+    Cerrar sesión
+</a>
+
+        </div>
+
+    </div>
+
+
+    
+
+</div>
+</body>
+</html>

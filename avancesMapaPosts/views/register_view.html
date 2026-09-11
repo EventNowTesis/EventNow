@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta — EventNow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="public/css/register.css">
+</head>
+
+<body>
+
+<main class="register-layout">
+
+<aside class="register-left">
+  <div class="bg-overlay"></div>
+
+  <div class="left-content">
+
+    <h2 class="font-serif">
+      Conciertos, ferias y planes que no sabías que existían.
+    </h2>
+
+    <ul class="features-list">
+
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             fill="none"
+             stroke="#F1ECDE"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/>
+        </svg>
+        Eventos verificados en tu zona
+      </li>
+
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             fill="none"
+             stroke="#F1ECDE"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/>
+        </svg>
+        Recordatorios antes de cada plan
+      </li>
+
+      <li>
+        <svg width="18" height="18" viewBox="0 0 24 24"
+             fill="none"
+             stroke="#F1ECDE"
+             stroke-width="2"
+             stroke-linecap="round"
+             stroke-linejoin="round">
+          <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z"/>
+        </svg>
+        Publicá tus propios eventos
+      </li>
+
+    </ul>
+  </div>
+</aside>
+
+  <div class="register-right">
+
+    <a href="index.php?slug=landing" class="brand-logo">
+      <div class="brand-logo-icon">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+      </div>
+      <span class="brand-logo-text">EventNow</span>
+    </a>
+
+    <h1 class="font-serif">Creá tu cuenta</h1>
+    <p class="description">Gratis, rápido, y sin spam. Solo planes buenos.</p>
+
+    <form action="index.php?slug=register" method="POST" enctype="multipart/form-data" autocomplete="on" onsubmit="return validateForm()">
+
+      <input type="hidden" name="txt_tipo_cuenta" id="txt_tipo_cuenta" value="" required>
+
+      <div class="form-group">
+        <span class="label-title">Tipo de cuenta</span>
+        <div class="custom-select-container" id="accountTypeSelect">
+          <div class="custom-select-trigger" id="selectTrigger" onclick="toggleDropdown()">
+            <div class="role-badge-icon" id="triggerIcon">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <span class="trigger-text" id="selectedText">¿Cómo vas a usar EventNow?</span>
+            <svg class="chevron-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </div>
+
+          <div class="custom-dropdown-menu">
+            <div class="dropdown-option" id="opt-visitante" onclick="selectRole('visitante', 'Cliente — quiero descubrir eventos')">
+              <div class="option-icon-box visitante">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div>
+                <span class="option-title">Cliente</span>
+                <span class="option-desc">Descubrí eventos cerca tuyo y guardá tus favoritos.</span>
+              </div>
+              <svg class="check-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+
+            <div class="dropdown-option" id="opt-anfitrion" onclick="selectRole('anfitrion', 'Organizador — quiero publicar eventos')">
+              <div class="option-icon-box anfitrion">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M15 5v2m0 4v2m0 4v2M5 5h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4V7a2 2 0 0 1 2-2z"></path>
+                </svg>
+              </div>
+              <div>
+                <span class="option-title">Organizador</span>
+                <span class="option-desc">Publicá tus eventos y llegá a más gente.</span>
+              </div>
+              <svg class="check-icon" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <p class="organizer-notice" id="organizerNotice">
+          Los eventos que publiques pasarán por revisión antes de mostrarse.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="txt_name" id="name-label">Nombre completo</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          <input id="txt_name" name="txt_name" type="text" placeholder="Nombre público" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="txt_email">Email</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <input id="txt_email" name="txt_email" type="email" placeholder="hola@tucorreo.com" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="txt_password">Contraseña</label>
+        <div class="input-wrapper">
+          <svg class="input-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <input id="txt_password" name="txt_password" type="password" minlength="8" placeholder="Mínimo 8 caracteres" required>
+          <button type="button" class="toggle-pass" onclick="togglePasswordVisibility()" aria-label="Mostrar u ocultar contraseña">
+            <svg id="eye-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div id="host-fields" class="host-fields hidden" style="display:none">
+        <div class="form-group">
+          <label for="txt_username">Nombre de usuario único</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"></path>
+              <path d="M15.5 9v3.5a2.5 2.5 0 0 0 5 0V12a8.5 8.5 0 1 0-3 6.5"></path>
+            </svg>
+            <input type="text" id="txt_username" name="txt_username" placeholder="username"
+                   pattern="[a-zA-Z0-9_]+" title="Solo letras, números y guiones bajos">
+          </div>
+          <span class="help-text">Tu nombre de usuario será único y aparecerá en tu perfil público.</span>
+        </div>
+      </div>
+
+      {msg_error}
+
+      <button name="btn_iniciar" class="btn-submit" type="submit">
+        Crear cuenta
+      </button>
+
+      <p class="terms-text">
+        Al registrarte aceptás los términos y la política de privacidad.
+      </p>
+
+    </form>
+
+    <div class="divider-box">
+      ¿Ya tenés cuenta? <a href="index.php?slug=login" class="login-link">Iniciá sesión</a>
+    </div>
+
+  </div>
+
+</main>
+
+<script src="public/js/register.js"></script>
+
+</body>
+</html>

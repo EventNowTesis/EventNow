@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{TITULO} — EventNow</title>
+  <meta name="description" content="{DESCRIPCION}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="public/css/stylesheet.css">
+  <link rel="stylesheet" href="public/css/detalleEvento.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.php?slug=landing" class="logo">
+        <div class="logo-icon" aria-hidden="true"></div>
+        <div class="logo-text">
+          <span class="logo-name">EventNow</span>
+          <span class="logo-subtitle">EVENTOS URBANOS</span>
+        </div>
+      </a>
+
+      <div class="navbar-menu">
+        <a href="index.php?slug=landing">Explorar</a>
+        <a href="#">Mapa</a>
+        <a href="#">Para organizadores</a>
+      </div>
+
+      <div class="navbar-actions">
+        {MENU_SESION}
+      </div>
+    </div>
+  </nav>
+
+  <main class="detail-page">
+
+    <a href="index.php?slug=landing" class="detail-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      Volver a eventos
+    </a>
+
+    <header class="detail-hero">
+      <div class="detail-hero-image">
+        <img src="{IMAGEN}" alt="{TITULO}" />
+        <span class="event-badge">{CATEGORIA}</span>
+      </div>
+
+      <div class="detail-hero-info">
+        <h1 class="detail-title">{TITULO}</h1>
+        {ORGANIZADOR_HTML}
+
+        <ul class="detail-meta">
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <path d="M16 2v4M8 2v4M3 10h18" />
+            </svg>
+            {FECHA_HORA}
+          </li>
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {ZONA}
+          </li>
+        </ul>
+
+        <div class="detail-cta-box">
+          <div class="event-price-box">
+            <span class="event-entrada-label">Entrada</span>
+            <span class="{PRECIO_CLASE}">{PRECIO_TEXTO}</span>
+          </div>
+          <a href="index.php?slug=confirmar&id={ID_EVENTO}" class="btn-confirm detail-confirm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+            Confirmar asistencia
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <div class="detail-grid">
+
+      <div class="detail-main">
+        <section class="detail-block reveal">
+          <h2 class="section-title">Sobre el evento</h2>
+          <p>{DESCRIPCION}</p>
+        </section>
+
+        {LINEUP_SECTION_HTML}
+
+        <section class="detail-block reveal">
+          <h2 class="section-title">Cómo llegar</h2>
+          <p class="detail-address">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            {ZONA}
+          </p>
+          <div id="mapa_detalle" data-zona="{ZONA}" style="width:100%;height:280px;border-radius:10px;margin-top:12px;"></div>
+        </section>
+      </div>
+
+      <aside class="detail-sidebar">
+        {CONTACTO_SECTION_HTML}
+
+        {INFO_UTIL_SECTION_HTML}
+
+        {NOTA_SECTION_HTML}
+      </aside>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">EventNow — EVENTOS URBANOS</div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="public/js/detalleEvento.js"></script>
+</body>
+</html>

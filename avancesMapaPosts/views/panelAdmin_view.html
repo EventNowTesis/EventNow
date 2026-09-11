@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventNow Panel Admin</title>
+    <link rel="stylesheet" href="public/css/admin.css">
+    
+    <script>
+        let formularioActual = null;
+
+        function solicitarPassword(form, mensaje) {
+            formularioActual = form;
+            document.getElementById('modalMensaje').innerText = mensaje;
+            document.getElementById('adminPassInput').value = '';
+            document.getElementById('modalPassword').style.display = 'flex';
+            document.getElementById('adminPassInput').focus();
+            return false;
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalPassword').style.display = 'none';
+            formularioActual = null;
+        }
+
+        function enviarFormulario() {
+            const pass = document.getElementById('adminPassInput').value.trim();
+            if (pass === "") {
+                alert("Por favor, ingresá la contraseña.");
+                return;
+            }
+            if (formularioActual) {
+                formularioActual.querySelector('input[name="admin_pass"]').value = pass;
+                const formToSubmit = formularioActual;
+                cerrarModal();
+                formToSubmit.submit();
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <header class="admin-header">
+            <h2>EventNow: Panel del Admin</h2>
+            <div style="display:flex; gap:10px;">
+                <a href="#seccion-usuarios" class="btn-logout" style="background-color: var(--salvia, #6E8F7A);">Ver Usuarios</a>
+                <a href="index.php?slug=logout" class="btn-logout">Cerrar sesión</a>
+            </div>
+        </header>
+
+        <h1 class="admin-title">Solicitudes de Eventos Pendientes</h1>
+        <p class="admin-subtitle">Formularios enviados por los anfitriones:</p>
+
+        {MSG}
+
+        <div class="tabla-container">
+            <table class="tabla-admin">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Organizador</th>
+                        <th>Categoría</th>
+                        <th>Fecha y Hora</th>
+                        <th>Ubicación</th>
+                        <th>Archivo</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {EVENTOS_PENDIENTES}
+                </tbody>
+            </table>
+        </div>
+
+        <h1 class="admin-title" id="seccion-usuarios" style="margin-top: 50px;">Usuarios Registrados</h1>
+        <p class="admin-subtitle">Gestión y eliminación de cuentas del sistema:</p>
+
+        <div class="tabla-container">
+            <table class="tabla-admin">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Rol</th>
+                        <th>Fecha Registro</th>
+                        <th>Acción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {TABLA_USUARIOS}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modalPassword" class="modal-overlay">
+        <div class="modal-box">
+            <h3>Confirmar Acción</h3>
+            <p id="modalMensaje">Ingresá tu contraseña de administrador para continuar:</p>
+            <input type="password" id="adminPassInput" placeholder="Contraseña..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); enviarFormulario(); }">
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button type="button" class="btn-confirmar" onclick="enviarFormulario()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<div class="mb-3">
+    <label for="direccion" class="form-label">
+        Dirección del evento
+    </label>
+
+    <div class="d-flex gap-2">
+        <input
+            type="text"
+            id="direccion"
+            name="direccion"
+            class="form-control"
+            placeholder="Ej: Av. Corrientes 1234, Buenos Aires"
+        >
+
+        <button
+            type="button"
+            id="btnBuscar"
+            class="btn btn-primary"
+        >
+            Buscar
+        </button>
+    </div>
+
+    <small class="text-muted">
+        También podés seleccionar la ubicación directamente en el mapa.
+    </small>
+</div>
+
+<div id="mi_mapa"></div>
+
+<!-- Coordenadas ocultas -->
+<input type="hidden" id="latitud" name="latitud">
+<input type="hidden" id="longitud" name="longitud">
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Tu JS -->
+<script src="assets/js/mapa.js"></script>
