@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nueva contraseña | EventNow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="public/css/login.css">
+  <link rel="stylesheet" href="public/css/nuevaContra.css">
+</head>
+
+<body>
+
+  <main class="login-layout">
+    <div class="login-left">
+      <a href="index.php?slug=landing" class="brand-logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <span class="brand-logo-text">EventNow</span>
+      </a>
+
+      <h1 class="font-serif">Elegí tu nueva contraseña</h1>
+      <p class="description">Código verificado. Escribí una contraseña nueva para tu cuenta.</p>
+
+      <form action="index.php?slug=nuevaContra" method="POST" id="form-nueva-contra" novalidate autocomplete="off">
+
+        <input type="text" name="username_oculto" value="{email_usuario}" autocomplete="username"
+          tabindex="-1" aria-hidden="true" readonly
+          style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;">
+
+        <div class="form-group">
+          <div class="label-header">
+            <label for="txt_pass">Nueva contraseña</label>
+          </div>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+            <input id="txt_pass" name="txt_pass" type="password" autocomplete="new-password" required>
+            <button type="button" class="toggle-pass" data-target="txt_pass" aria-label="Mostrar contraseña">
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label-header">
+            <label for="txt_pass2">Repetí la contraseña</label>
+          </div>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+            <input id="txt_pass2" name="txt_pass2" type="password" autocomplete="new-password" required>
+            <button type="button" class="toggle-pass" data-target="txt_pass2" aria-label="Mostrar contraseña">
+              <i class="fa-regular fa-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <ul class="reglas" aria-live="polite">
+          <li id="regla-largo"><i class="fa-regular fa-circle" aria-hidden="true"></i> Al menos 8 caracteres</li>
+          <li id="regla-igual"><i class="fa-regular fa-circle" aria-hidden="true"></i> Las dos contraseñas coinciden
+          </li>
+        </ul>
+
+        <div id="msg__error">{msg_error}</div>
+
+        <button class="btn-submit" type="submit">Guardar contraseña</button>
+
+      </form>
+
+      <div class="divider-box">
+        ¿Cambiaste de idea? <a href="index.php?slug=login" class="register-link">Volver al login</a>
+      </div>
+
+    </div>
+
+    <aside class="login-right">
+      <div class="bg-overlay"></div>
+      <div class="right-content">
+        <i class="fa-solid fa-shield-halved ticket-icon" aria-hidden="true"></i>
+        <h2 class="font-serif">Último paso.</h2>
+        <p>Después de guardarla, entrás con tu contraseña nueva.</p>
+      </div>
+    </aside>
+
+  </main>
+
+  <script src="public/js/nuevaContra.js"></script>
+</body>
+
+</html>

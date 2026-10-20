@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{DESCRIPCION}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="public/css/stylesheet.css">
+  <link rel="stylesheet" href="public/css/detalleEvento.css">
+  <link rel="stylesheet" href="public/css/detalleEvento-nuevo.css">
+  <link rel="stylesheet" href="public/css/navbar.css">
+  <link rel="stylesheet" href="public/css/toast.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE} {BODY_EXTRA}">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+
+      <a href="index.php?slug=landing" class="logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">EventNow</span>
+          <span class="logo-subtitle">EVENTOS URBANOS</span>
+        </div>
+      </a>
+
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+        onclick="toggleMobileMenu(this)">
+        <i class="fa-solid fa-bars icon-open"></i>
+        <i class="fa-solid fa-xmark icon-close"></i>
+      </button>
+
+      <div class="navbar-menu">
+        <a href="index.php?slug=landing">Eventos</a>
+        <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+        <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+        <a href="index.php?slug=panelAdmin#seccion-usuarios" class="menu-solo-admin">Ver usuarios</a>
+        <a href="index.php?slug=logout" class="menu-solo-admin"
+          onclick="return confirm('¿Seguro que querés cerrar sesión?');">Cerrar sesión</a>
+      </div>
+
+      <div class="navbar-actions">
+        <!-- NOTIFICACIONES -->
+        <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+          <div class="notification-icon">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+          </div>
+
+          <div class="dropdown-notifications">
+            <h4>Notificaciones</h4>
+            <ul>
+              {LISTA_NOTIFICACIONES}
+            </ul>
+          </div>
+        </div>
+        <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+          <div class="user-profile">
+            <div class="user-profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span>{USUARIO_NOMBRE}</span>
+            <i class="fa-solid fa-chevron-down chevron-user"></i>
+          </div>
+
+          <div class="dropdown-user">
+            <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+              <i class="fa-solid fa-user"></i>
+              Perfil
+            </a>
+            <a href="index.php?slug=mensajes" class="dropdown-user-item">
+              <i class="fa-solid fa-comments"></i>
+              Mensajes
+            </a>
+            <a href="index.php?slug=configuracionVisitante" class="dropdown-user-item menu-solo-visitante">
+              <i class="fa-solid fa-gear"></i>
+              Configuración
+            </a>
+            <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+              onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Cerrar sesión
+            </a>
+            <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+              onclick="event.stopPropagation(); abrirModalEliminar();">
+              <i class="fa-solid fa-trash-can"></i>
+              Eliminar mi cuenta
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="detail-page">
+
+    {PANEL_REVISION_HTML}
+
+    <!-- MIGAS DE PAN -->
+    <div class="detail-breadcrumb">
+      <a href="index.php?slug=landing"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Eventos</a>
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      <span>{CATEGORIA}</span>
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      <span>{TITULO}</span>
+    </div>
+
+    <div id="evento-pdf" data-id="{ID_EVENTO}">
+
+      <header class="detail-hero">
+
+        <div class="detail-hero-image">
+          <div class="carousel" id="carousel-evento">
+            <div class="carousel-track">{CARRUSEL_SLIDES}</div>
+            <button type="button" class="carousel-btn carousel-prev" aria-label="Imagen anterior"><i
+                class="fa-solid fa-chevron-left"></i></button>
+            <button type="button" class="carousel-btn carousel-next" aria-label="Imagen siguiente"><i
+                class="fa-solid fa-chevron-right"></i></button>
+            <div class="carousel-dots"></div>
+          </div>
+          <span class="event-badge"><i class="fa-solid fa-music" aria-hidden="true"></i> {CATEGORIA}</span>
+          <span class="carousel-count" id="carousel-count"><i class="fa-regular fa-images" aria-hidden="true"></i> <b>1
+              / 1</b></span>
+        </div>
+
+        <div class="detail-hero-info">
+
+          <div class="detail-eyebrow-row">
+            <p class="detail-eyebrow"> {EYEBROW}</p>
+            {BOTON_FAVORITO_HTML}
+          </div>
+
+          <div class="detail-title-row">
+            <h1 class="detail-title">{TITULO}</h1>
+          </div>
+
+          <p class="detail-subtitle">{SUBTITULO}</p>
+
+          {ORGANIZADOR_HTML}
+
+          <ul class="detail-meta">
+            <li>
+              <span class="meta-icon"><i class="fa-regular fa-calendar" aria-hidden="true"></i></span>
+              <div class="meta-text">
+                {FECHA_HORA}
+                {FECHA_HORA_ANTERIOR_HTML}
+              </div>
+            </li>
+            <li>
+              <span class="meta-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+              <div class="meta-text">{ZONA}</div>
+            </li>
+          </ul>
+
+          <div class="detail-cta-box">
+            <div class="event-price-box {PRECIO_BOX_CLASE}">
+              <div class="price-text">
+                <span class="event-entrada-label">Entrada</span>
+                <span class="{PRECIO_CLASE}">{PRECIO_TEXTO}</span>
+              </div>
+            </div>
+            {BOTON_CONFIRMAR_HTML}
+          </div>
+        </div>
+      </header>
+
+      <div class="detail-grid">
+
+        <div class="detail-main">
+          {OTROS_CAMBIOS_HTML}
+
+          <section class="detail-block reveal">
+            <h2 class="section-title"><i class="fa-solid fa-music" aria-hidden="true"></i> Sobre el evento</h2>
+            <p>{DESCRIPCION}</p>
+            <div class="detail-tags">{ETIQUETAS_HTML}</div>
+          </section>
+
+          {LINEUP_SECTION_HTML}
+
+          <section class="detail-block reveal">
+            <h2 class="section-title"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Cómo llegar</h2>
+            {UBICACION_HTML}
+            <div id="mapa_detalle" data-zona="{ZONA}"></div>
+          </section>
+
+          {VALORACIONES_HTML}
+        </div>
+
+        <aside class="detail-sidebar">
+          {INFO_UTIL_SECTION_HTML}
+
+          {CONTACTO_SECTION_HTML}
+
+          {NOTA_SECTION_HTML}
+          <section class="detail-card detail-share" data-no-pdf>
+            <h3 class="detail-card-title"><i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Compartí este plan
+            </h3>
+            <p class="share-copy">Los mejores planes se disfrutan en compañía.</p>
+
+            <!-- QR -->
+            <div id="qr-evento" data-id="{ID_EVENTO}"></div>
+            <p class="share-qr-caption">Escaneá el QR para ver este evento</p>
+
+            <div class="share-buttons" style="justify-content: center;">
+              <button type="button" id="btn-copiar-enlace" aria-label="Copiar enlace" title="Copiar enlace"><i
+                  class="fa-regular fa-copy"></i></button>
+              <button type="button" id="btn-whatsapp" aria-label="Compartir en WhatsApp"
+                title="Compartir en WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+              <button type="button" id="btn-compartir" aria-label="Compartir evento" title="Compartir evento"><i
+                  class="fa-solid fa-arrow-up-from-bracket"></i></button>
+            </div>
+
+            <button type="button" id="btn-descargar-pdf" class="btn-download-pdf">
+              <i class="fa-solid fa-download" aria-hidden="true"></i> Descargar evento en PDF
+            </button>
+          </section>
+        </aside>
+      </div>
+
+    </div>
+    <aside class="card-contacto-organizador">
+      <span class="contacto-icono"><i class="fa-regular fa-comments" aria-hidden="true"></i></span>
+      <div class="contacto-texto">
+        <h4>{CONTACTO_TITULO}</h4>
+        <p>{CONTACTO_DESC}</p>
+      </div>
+      <a href="{CONTACTO_URL}" class="btn-contacto">
+        <i class="fa-regular fa-comment" aria-hidden="true"></i> {CONTACTO_TEXTO}
+      </a>
+    </aside>
+
+    <div id="notice" class="dp-notice" role="status" hidden></div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">EventNow — EVENTOS URBANOS</div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="public/js/detalleEvento.js?v=2"></script>
+  <script src="public/js/toast.js"></script>
+<script src="public/js/custom-select.js"></script>
+  <script src="public/js/navbar.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración | EventNow</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="public/css/panel_visitante.css">
+  <link rel="stylesheet" href="public/css/navbar.css">
+  <link rel="stylesheet" href="public/css/Configuracion.css">
+
+
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+
+      <a href="index.php?slug=landing" class="logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">EventNow</span>
+          <span class="logo-subtitle">EVENTOS URBANOS</span>
+        </div>
+      </a>
+
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+        onclick="toggleMobileMenu(this)">
+        <i class="fa-solid fa-bars icon-open"></i>
+        <i class="fa-solid fa-xmark icon-close"></i>
+      </button>
+
+      <div class="navbar-menu">
+        <a href="index.php?slug=landing">Eventos</a>
+        <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+        <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+      </div>
+
+      <div class="navbar-actions">
+        <!-- NOTIFICACIONES -->
+        <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+          <div class="notification-icon">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+          </div>
+
+          <div class="dropdown-notifications">
+            <h4>Notificaciones</h4>
+            <ul>
+              {LISTA_NOTIFICACIONES}
+            </ul>
+          </div>
+        </div>
+        <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+          <div class="user-profile">
+            <div class="user-profile-avatar">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span>{USUARIO_NOMBRE}</span>
+            <i class="fa-solid fa-chevron-down chevron-user"></i>
+          </div>
+
+          <div class="dropdown-user">
+            <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+              <i class="fa-solid fa-user"></i>
+              Perfil
+            </a>
+            <a href="index.php?slug=mensajes" class="dropdown-user-item">
+              <i class="fa-solid fa-comments"></i>
+              Mensajes
+            </a>
+            <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+              <i class="fa-solid fa-gear"></i>
+              Configuración
+            </a>
+            <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+              onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+              <i class="fa-solid fa-right-from-bracket"></i>
+              Cerrar sesión
+            </a>
+            <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+              onclick="event.stopPropagation(); abrirModalEliminar();">
+              <i class="fa-solid fa-trash-can"></i>
+              Eliminar mi cuenta
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </nav>
+  <div class="modal-eliminar" id="modal-eliminar" hidden>
+        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+            <h3>Eliminar mi cuenta</h3>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
+            <div class="modal-eliminar-acciones">
+                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+            </div>
+        </form>
+    </div>
+  <main class="cfg-contenedor">
+    <div class="cfg-titulo">
+      <h1><i class="fa-solid fa-gear"></i>
+        Configuración
+      </h1>
+      <p>Definí la dirección exacta desde la que participás de EventNow.</p>
+    </div>
+
+    <div class="cfg-grid">
+      <section class="cfg-card cfg-card-datos">
+        <h2>
+          <i class="fa-solid fa-location-dot"></i>
+          Tu ubicación
+        </h2>
+        <p class="cfg-ubicacion-actual">
+          <span class="cfg-ubicacion-actual-label">Dirección guardada</span>
+          <span id="cfg-ubicacion-actual-texto" class="cfg-ubicacion-actual-valor"></span>
+        </p>
+        <hr class="cfg-separador">
+        <label class="cfg-label" for="cfg-direccion">Buscar nueva dirección</label>
+        <div class="cfg-buscador">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="cfg-direccion" placeholder="Escribí una calle, barrio o ciudad..." autocomplete="off">
+          <ul id="cfg-sugerencias" class="cfg-sugerencias" hidden></ul>
+        </div>
+        <button type="button" id="cfg-btn-geo" class="cfg-btn-geo">
+          <i class="fa-solid fa-crosshairs"></i>
+          Usar mi ubicación actual
+        </button>
+        <p id="cfg-estado-geo" class="cfg-estado-geo"></p>
+        <p class="cfg-hint">
+          <i class="fa-solid fa-circle-info"></i>
+          También podés tocar directamente un punto del mapa para elegirlo.
+        </p>
+        <input type="hidden" id="cfg-lat" value="{USUARIO_LAT}">
+        <input type="hidden" id="cfg-lon" value="{USUARIO_LON}">
+        <input type="hidden" id="cfg-direccion-texto" value="{USUARIO_UBICACION_TEXTO}">
+        <button type="button" id="cfg-btn-guardar" class="cfg-btn-guardar">
+          <i class="fa-solid fa-floppy-disk"></i>
+          Guardar ubicación
+        </button>
+        <p id="cfg-guardar-estado"></p>
+      </section>
+      <section class="cfg-card cfg-card-mapa">
+        <div id="mapa_config" class="cfg-mapa"></div>
+      </section>
+
+    </div>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="public/js/navbar.js"></script>
+  <script src="public/js/config_ubicacion.js"></script>
+
+</body>
+
+</html>

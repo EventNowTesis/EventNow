@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | EventNow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="public/css/login.css">
+
+</head>
+
+<body>
+
+    <main class="login-layout">
+
+        <div class="login-left">
+
+            <a href="index.php?slug=landing" class="brand-logo">
+
+                <div class="logo-icon">
+
+                    <img src="public/imgs/logo1.png" alt="Logo EventNow">
+
+                </div>
+
+                <span class="brand-logo-text">
+                    EventNow
+                </span>
+
+            </a>
+
+
+            <h1 class="font-serif">
+                Qué bueno verte de nuevo
+            </h1>
+
+
+            <p class="description">
+                En la ciudad siguen pasando cosas.
+                Entrá y no te pierdas ninguna.
+            </p>
+
+
+            <form action="index.php?slug=login" method="POST">
+
+                <div class="form-group">
+
+                    <div class="label-header">
+
+                        <label for="txt_email">
+                            Correo electrónico
+                        </label>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-regular fa-envelope input-icon" aria-hidden="true"></i>
+
+
+                        <input id="txt_email" name="txt_email" type="email" placeholder="hola@gmail.com" required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="label-header">
+
+                        <label for="txt_password">
+                            Contraseña
+                        </label>
+
+                    </div>
+
+
+                    <div class="input-wrapper">
+
+                        <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+
+
+                        <input id="txt_password" name="txt_password" type="password" placeholder="•••" required>
+
+
+                        <button type="button" class="toggle-pass" onclick="togglePasswordVisibility()"
+                            aria-label="Mostrar u ocultar contraseña">
+
+                            <i class="fa-regular fa-eye" id="eye-icon" aria-hidden="true"></i>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <a href="index.php?slug=recuperarContra" class="forgot-link">
+                    ¿La olvidaste?
+                </a>
+                <br>
+                <a href="index.php?slug=recuperarCuenta" class="forgot-link">
+                    ¿Querés recuperar la cuenta?
+                </a>
+
+                <div id="msg__error">{msg_error}</div>
+
+
+                <button name="btn_iniciar" class="btn-submit" type="submit">
+                    Iniciar sesión
+                </button>
+
+            </form>
+
+
+            <div class="divider-box">
+
+                ¿Todavía no tienes cuenta?
+
+                <a href="index.php?slug=register" class="register-link">
+                    Creala aca
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <aside class="login-right">
+
+            <div class="bg-overlay"></div>
+
+
+            <div class="right-content">
+
+
+
+                <h2 class="font-serif">
+                    Tu próxima noche empieza con un clic.
+                </h2>
+
+
+                <p>
+                    Guarda eventos, confirma asistencia y recibe
+                    recordatorios de lo que pasa cerca tuyo.
+                </p>
+
+
+                <div class="icons-row">
+
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+
+                    <i class="fa-solid fa-music" aria-hidden="true"></i>
+
+                    <i class="fa-solid fa-ticket" aria-hidden="true"></i>
+
+                </div>
+
+            </div>
+
+        </aside>
+
+    </main>
+
+
+    <script src="public/js/login.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventNow — Mapa de eventos</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="public/css/stylesheet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="public/css/mapa.css">
+  <link rel="stylesheet" href="public/css/navbar.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+
+      <a href="index.php?slug=landing" class="logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">EventNow</span>
+          <span class="logo-subtitle">EVENTOS URBANOS</span>
+        </div>
+      </a>
+
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMobileMenu(this)">
+        <i class="fa-solid fa-bars icon-open"></i>
+        <i class="fa-solid fa-xmark icon-close"></i>
+      </button>
+
+      <div class="navbar-menu">
+        <a href="index.php?slug=landing">Eventos</a>
+        <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+        <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+      </div>
+
+      <div class="navbar-actions">
+                <!-- NOTIFICACIONES -->
+                <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+                    <div class="notification-icon">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+                    </div>
+
+                    <div class="dropdown-notifications">
+                        <h4>Notificaciones</h4>
+                        <ul>
+                            {LISTA_NOTIFICACIONES}
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+                    <div class="user-profile">
+                        <div class="user-profile-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>{USUARIO_NOMBRE}</span>
+                        <i class="fa-solid fa-chevron-down chevron-user"></i>
+                    </div>
+
+                    <div class="dropdown-user">
+                        <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+                            <i class="fa-solid fa-user"></i>
+                            Perfil
+                        </a>
+                        <a href="index.php?slug=mensajes" class="dropdown-user-item">
+                            <i class="fa-solid fa-comments"></i>
+                            Mensajes
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-gear"></i>
+                            Configuración
+                        </a>
+                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                            onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Cerrar sesión
+                        </a>
+                        <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+                            onclick="event.stopPropagation(); abrirModalEliminar();">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Eliminar mi cuenta
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+    </div>
+  </nav>
+  <div class="modal-eliminar" id="modal-eliminar" hidden>
+        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+            <h3>Eliminar mi cuenta</h3>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
+            <div class="modal-eliminar-acciones">
+                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+            </div>
+        </form>
+    </div>
+  <main class="mapa-page">
+
+    <header class="mapa-header">
+      <h1 class="mapa-title">Eventos <span class="highlight">cerca tuyo</span></h1>
+      <p class="mapa-count"><strong data-count>0</strong> eventos encontrados</p>
+    </header>
+
+    <section class="mapa-toolbar" aria-label="Filtros del mapa">
+      <div class="mapa-chips" data-chips role="group" aria-label="Filtrar por categoría"></div>
+      <div class="mapa-actions">
+        <button type="button" class="btn-locate" data-locate>
+          <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
+          <span data-locate-label>Cerca de mí</span>
+        </button>
+      </div>
+    </section>
+
+    <div class="mapa-layout">
+      <div class="mapa-map-wrap">
+        <div id="mapa-eventos" role="application" aria-label="Mapa de eventos"></div>
+      </div>
+
+      <aside class="mapa-list" data-list aria-label="Eventos en el mapa"></aside>
+    </div>
+
+    <p class="mapa-hint" data-hint>Tip: tocá un pin o una tarjeta para ubicarlo al instante.</p>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-container">EventNow — EVENTOS URBANOS</div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const EVENTOS = {EVENTOS_JSON};
+    const USER_LAT = {USER_LAT};
+    const USER_LON = {USER_LON};
+  </script>
+  <script src="public/js/panel.js"></script>
+  <script src="public/js/mapa_eventos.js"></script>
+  <script src="public/js/navbar.js"></script>
+
+</body>
+
+</html>

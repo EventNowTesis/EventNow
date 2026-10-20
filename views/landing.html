@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventNow — Eventos Urbanos</title>
+  <meta name="description"
+    content="Descubrí conciertos, ferias, partidos y propuestas culturales cerca tuyo. Filtrá por barrio, fecha o precio." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../public/css/stylesheet.css">
+  <link rel="stylesheet" href="../public/css/navbar.css">
+  <link rel="stylesheet" href="../public/css/filtros.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+  <nav class="navbar">
+    <div class="navbar-container">
+      <a href="index.php?slug=landing" class="logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">EventNow</span>
+          <span class="logo-subtitle">EVENTOS URBANOS</span>
+        </div>
+      </a>
+
+      <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+        onclick="toggleMobileMenu(this)">
+        <i class="fa-solid fa-bars icon-open"></i>
+        <i class="fa-solid fa-xmark icon-close"></i>
+      </button>
+
+      <div class="navbar-menu">
+        <a href="index.php?slug=landing">Eventos</a>
+        <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+        <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+      </div>
+
+      <div class="navbar-actions">
+
+        <div class="menu-logueado">
+          <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+            <div class="notification-icon">
+              <i class="fa-solid fa-bell"></i>
+              <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+            </div>
+
+            <div class="dropdown-notifications">
+              <h4>Notificaciones</h4>
+              <ul>
+                {LISTA_NOTIFICACIONES}
+              </ul>
+            </div>
+          </div>
+
+          <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+            <div class="user-profile">
+              <div class="user-profile-avatar">
+                <i class="fa-solid fa-user"></i>
+              </div>
+              <span>{USUARIO_NOMBRE}</span>
+              <i class="fa-solid fa-chevron-down chevron-user"></i>
+            </div>
+
+            <div class="dropdown-user">
+              <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+                <i class="fa-solid fa-user"></i>
+                Perfil
+              </a>
+              <a href="index.php?slug=mensajes" class="dropdown-user-item">
+                <i class="fa-solid fa-comments"></i>
+                Mensajes
+              </a>
+              <a href="index.php?slug=configuracionVisitante" class="dropdown-user-item menu-solo-visitante">
+                <i class="fa-solid fa-gear"></i>
+                Configuración
+              </a>
+              <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Cerrar sesión
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="menu-invitado">
+          <a href="index.php?slug=login" class="login-link">Iniciar sesión</a>
+          <a href="index.php?slug=register" class="register-button">Crear cuenta</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <span class="hero-badge">
+      <i class="fa-solid fa-star" aria-hidden="true"></i>
+      <span id="mes-actual"> Nueva edición</span>
+    </span>
+    <h1 class="hero-title">La ciudad, <span class="highlight">en vivo</span> cada noche.</h1>
+    <p class="hero-description">
+      Descubrí conciertos, ferias, partidos y propuestas culturales cerca tuyo. Filtrá por
+      barrio, fecha o precio, y confirmá tu asistencia en un toque.
+    </p>
+    <div class="hero-info">
+      <span class="info-item">
+        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        {ZONAS_ACTIVAS} zonas activas
+      </span>
+      <span class="info-separator">•</span>
+      <span class="info-item">+120 eventos esta semana</span>
+      <span class="info-separator">•</span>
+      <span class="info-item">Organizadores verificados</span>
+    </div>
+  </section>
+
+  <div class="location-toast" id="location-toast" role="alert" data-visible="{AVISO_UBICACION}" style="display:none;">
+    <button type="button" class="location-toast-close" aria-label="Cerrar" id="location-toast-close">&times;</button>
+    <div class="location-toast-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <div class="location-toast-body">
+      <strong>Todavía no configuraste tu ubicación</strong>
+      <p>Para ver el mapa con eventos cerca tuyo:</p>
+      <ol>
+        <li>Hacé clic en tu nombre de usuario.</li>
+        <li>Abrí <strong>Configuración</strong> y guardá tu dirección.</li>
+      </ol>
+    </div>
+  </div>
+
+  <section class="filters-section">
+    <div class="filters-box">
+      <form method="GET" action="index.php" id="form-filtros">
+        <input type="hidden" name="slug" value="landing">
+        <input type="hidden" name="pagina" id="input-pagina" value="{PAGINA}">
+
+        <div class="search-container">
+          <div class="search-form">
+            <input type="text" name="buscar" class="search-input"
+              placeholder="Buscar por nombre, organizador o palabra clave..." value="{BUSQUEDA}">
+          </div>
+        </div>
+
+        <div class="filters-grid">
+          <div class="filter">
+            <select class="filter-control" name="categoria" aria-label="Categoría" id="select-categoria"
+              data-seleccionada="{CATEGORIA_SELECCIONADA}">
+              <option value="">Todas las categorías</option>
+              <option value="musica">Música</option>
+              <option value="deporte">Deportes</option>
+              <option value="feria">Ferias</option>
+              <option value="arte">Arte</option>
+              <option value="gastronomia">Gastronomía</option>
+              <option value="tecnologia">Tecnología</option>
+              <option value="otro">Otro</option>
+            </select>
+          </div>
+          <div class="filter">
+            <select class="filter-control" name="localidad" aria-label="Zona" id="select-localidad"
+              data-seleccionada="{LOCALIDAD_SELECCIONADA}">
+              <option value="">Todas las zonas</option>
+            </select>
+          </div>
+
+          <div class="filter">
+            <select class="filter-control" name="temporalidad" aria-label="Cuándo" id="select-temporalidad"
+              data-seleccionada="{TEMPORALIDAD_SELECCIONADA}">
+              <option value="vigentes" {TEMPORALIDAD_VIGENTES}>Eventos próximos</option>
+              <option value="pasados" {TEMPORALIDAD_PASADOS}>Eventos pasados</option>
+              <option value="todos" {TEMPORALIDAD_TODOS}>Todos los eventos</option>
+            </select>
+          </div>
+
+          <!-- PRECIO (todavía sin funcionar) 
+          <div class="filter">
+            <select class="filter-control" aria-label="Precio">
+              <option>Todos los precios</option>
+              <option>Gratis</option>
+              <option>De pago</option>
+            </select>
+          </div>
+-->
+
+
+          <div class="filter">
+            <select class="filter-control" name="ranking" form="form-filtros">
+
+              <option value="">Todas las puntuaciones</option>
+
+              <option value="5" {RANKING_5}> 5 estrellas </option>
+
+              <option value="4" {RANKING_4}> 4 estrellas o más</option>
+
+              <option value="3" {RANKING_3}>3 estrellas o más</option>
+
+              <option value="2" {RANKING_2}>2 estrellas o más</option>
+
+              <option value="1" {RANKING_1}> 1 estrella o más</option>
+
+            </select>
+          </div>
+
+          <!-- FECHA DESDE -->
+          <div class="filter">
+            <input type="date" class="filter-control" name="fecha_desde" id="fecha-desde" value="{FECHA_DESDE}">
+          </div>
+
+          <!-- FECHA HASTA -->
+          <div class="filter">
+            <input type="date" class="filter-control" name="fecha_hasta" id="fecha-hasta" value="{FECHA_HASTA}">
+          </div>
+        </div>
+      </form>
+      <div class="filters-footer">
+        <a href="index.php?slug=landing" class="link-limpiar-filtros">Limpiar filtros</a>
+      </div>
+      <div class="event-counter">
+        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+        <span>
+          <strong>{CANTIDAD_EVENTOS}</strong> eventos encontrados
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="events-section">
+    <div class="events-header">
+      <h2 class="section-title">Eventos</h2>
+      <div class="filter orden-filter">
+        <select class="filter-control" name="orden" form="form-filtros" aria-label="Orden por fecha" id="select-orden">
+          <option value="asc" {ORDEN_ASC}>Fecha: ascendente</option>
+          <option value="desc" {ORDEN_DESC}>Fecha: descendente</option>
+          <option value="ranking" {ORDEN_RANKING}>Mejor puntuación</option>
+        </select>
+      </div>
+    </div>
+    <div class="paginacion paginacion-arriba">{PAGINACION_ARRIBA}</div>
+    <div class="events-grid">
+      {EVENTOS}
+    </div>
+    <div class="paginacion">{PAGINACION}</div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-container">EventNow — EVENTOS URBANOS</div>
+  </footer>
+
+  <div id="landing-datos" data-localidades='{LOCALIDADES_JSON}' style="display:none;"></div>
+
+  <script src="../public/js/filtros.js"></script>
+  <script src="../public/js/custom-select.js"></script>
+  <script src="../public/js/panel.js"></script>
+  <script src="../public/js/toast.js"></script>
+  <script src="../public/js/navbar.js"></script>
+
+    {CHATBOT_SCRIPT}
+    
+</body>
+
+</html>

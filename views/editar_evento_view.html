@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar evento · EventNow</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- posts.css es la base compartida; editar_evento.css solo agrega lo propio de editar -->
+    <link rel="stylesheet" href="public/css/posts.css">
+    <link rel="stylesheet" href="public/css/toast.css">
+    <link rel="stylesheet" href="public/css/navbar.css">
+    <link rel="stylesheet" href="public/css/editar_evento.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="index.php?slug=panel" class="logo">
+                <div class="logo-icon">
+                    <img src="public/imgs/logo1.png" alt="Logo EventNow">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-name">EventNow</span>
+                    <span class="logo-subtitle">EVENTOS URBANOS</span>
+                </div>
+            </a>
+
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+                onclick="toggleMobileMenu(this)">
+                <i class="fa-solid fa-bars icon-open"></i>
+                <i class="fa-solid fa-xmark icon-close"></i>
+            </button>
+
+            <div class="navbar-menu">
+                <a href="index.php?slug=landing">Eventos</a>
+                <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+                <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+            </div>
+
+            <div class="navbar-actions">
+                <!-- NOTIFICACIONES -->
+                <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+                    <div class="notification-icon">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+                    </div>
+
+                    <div class="dropdown-notifications">
+                        <h4>Notificaciones</h4>
+                        <ul>
+                            {LISTA_NOTIFICACIONES}
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+                    <div class="user-profile">
+                        <div class="user-profile-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>{USUARIO_NOMBRE}</span>
+                        <i class="fa-solid fa-chevron-down chevron-user"></i>
+                    </div>
+
+                    <div class="dropdown-user">
+                        <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+                            <i class="fa-solid fa-user"></i>
+                            Perfil
+                        </a>
+                        <a href="index.php?slug=mensajes" class="dropdown-user-item">
+                            <i class="fa-solid fa-comments"></i>
+                            Mensajes
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-gear"></i>
+                            Configuración
+                        </a>
+                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                            onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Cerrar sesión
+                        </a>
+                        <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+                            onclick="event.stopPropagation(); abrirModalEliminar();">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Eliminar mi cuenta
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+    <div class="modal-eliminar" id="modal-eliminar" hidden>
+        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+            <h3>Eliminar mi cuenta</h3>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
+            <div class="modal-eliminar-acciones">
+                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+            </div>
+        </form>
+    </div>
+    <section class="pub-page">
+        <div class="pub-wrap">
+
+            <nav class="breadcrumb" aria-label="Migas de pan">
+                <i class="fa-solid fa-chevron-right"></i>
+                <span>Editar evento</span>
+            </nav>
+
+            <header class="pub-hero">
+                <span class="pub-badge"><i class="fa-solid fa-pen"></i> Para organizadores</span>
+                <h1 class="pub-title">Editá tu evento, <span class="highlight">que siga el encuentro.</span></h1>
+                <p class="pub-lead">Los detalles cambian, las ganas de encontrarse no. Actualizá la información. Los
+                    campos con <span class="req">*</span> son obligatorios.</p>
+            </header>
+
+            <div class="pub-grid">
+
+                <!-- ============ FORMULARIO ============ -->
+                <div class="pub-main">
+                    <form action="index.php?slug=editar_evento" method="POST" enctype="multipart/form-data"
+                        id="form-evento">
+
+                        <input type="hidden" name="id_evento" value="{ID_EVENTO}">
+
+                        <!-- 01 · Lo esencial -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">01</span>
+                                <h2 class="card-title">Lo esencial</h2>
+                            </div>
+
+                            <div class="grupo-campo">
+                                <label for="titulo">Título del evento <span class="req">*</span></label>
+                                <input type="text" id="titulo" name="titulo" value="{TITULO}"
+                                    placeholder="Ej: Festival Sonora Urbana" required>
+                            </div>
+
+                            <div class="grupo-campo">
+                                <label for="descripcion">Descripción <span class="req">*</span></label>
+                                <textarea id="descripcion" name="descripcion" rows="4"
+                                    placeholder="Contá de qué se trata, quién toca, qué van a encontrar..."
+                                    required>{DESCRIPCION}</textarea>
+                            </div>
+
+                            <div class="grid-3">
+                                <div class="grupo-campo">
+                                    <label for="fecha">Fecha <span class="req">*</span></label>
+                                    <input type="date" id="fecha" name="fecha" value="{FECHA}" required>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="hora">Hora <span class="req">*</span></label>
+                                    <input type="time" id="hora" name="hora" value="{HORA}" required>
+                                </div>
+
+                                <div class="grupo-campo">
+                                    <label for="categoria">Categoría <span class="req">*</span></label>
+                                    <select id="categoria" name="categoria" required>
+                                        <option value="musica" {MUSICA}>Música</option>
+                                        <option value="deporte" {DEPORTE}>Deporte</option>
+                                        <option value="feria" {FERIA}>Ferias</option>
+                                        <option value="arte" {ARTE}>Arte y cultura</option>
+                                        <option value="gastronomia" {GASTRONOMIA}>Gastronomía</option>
+                                        <option value="tecnologia" {TECNOLOGIA}>Tecnología</option>
+                                        <option value="otro" {OTRO}>Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 02 · Ubicación -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">02</span>
+                                <h2 class="card-title">Ubicación</h2>
+                            </div>
+
+                            <div class="grupo-campo ubicacion-box">
+                                <div class="search-box">
+                                    <input type="text" id="direccion" placeholder="Ej: lugar/localidad, provincia"
+                                        autocomplete="off" aria-label="Buscar dirección">
+                                    <button type="button" class="btn-buscar" id="btn-buscar">
+                                        <i class="fa-solid fa-magnifying-glass"></i> Buscar
+                                    </button>
+                                </div>
+
+                                <label for="ubicacion" class="label-suelto">Dirección <span class="req">*</span></label>
+                                <input type="text" name="ubicacion" id="ubicacion" value="{ZONA}"
+                                    placeholder="Resultado de tu búsqueda" required>
+                                <input type="hidden" name="lat" id="lat" value="{LAT}">
+                                <input type="hidden" name="lon" id="lon" value="{LON}">
+
+                                <div class="acciones-ubicacion">
+                                    <button type="button" class="btn-ubicacion" id="btn_ubi">
+                                        <i class="fa-solid fa-crosshairs"></i> Usar mi ubicación actual
+                                    </button>
+                                    <span id="estado-ubicacion"></span>
+                                </div>
+
+                                <div id="mi_mapa"></div>
+
+                                <label for="localidad" class="label-suelto">Localidad</label>
+                                <input type="text" name="localidad" id="localidad" value="{LOCALIDAD}"
+                                    placeholder="Se completa sola al elegir la ubicación">
+                                <p class="texto-subseccion texto-chico">Se usa para el filtro de zonas del inicio.
+                                    Podés corregirla si hace falta.</p>
+                            </div>
+                        </section>
+
+                        <!-- 03 · Imágenes -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">03</span>
+                                <h2 class="card-title">Imágenes</h2>
+                                <span class="card-opt">(mínimo 2, máximo 6)</span>
+                            </div>
+                            <div class="imagenes-actuales" id="imagenes-actuales">{IMAGENES_ACTUALES}</div>
+
+                            <label class="dropzone" id="dropzone" for="input-archivo">
+                                <i class="fa-regular fa-images dropzone-icon"></i>
+                                <strong>Arrastrá o elegí tus fotos</strong>
+                                <span class="dropzone-sub"><span id="contador-imagenes">0</span>/6 cargadas · JPG o
+                                    PNG</span>
+                                <input type="file" name="imagenes[]" id="input-archivo" accept="image/*" multiple
+                                    class="sr-only">
+                            </label>
+                        </section>
+
+                        <!-- 04 · Line-up -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">04</span>
+                                <h2 class="card-title">Line-up / horario</h2>
+                                <span class="card-opt">opcional</span>
+                            </div>
+                            <p class="texto-subseccion">Agregá los momentos clave del evento, ej: 21:00 — Concierto.
+                            </p>
+
+                            <div class="filas-dinamicas" id="lista-horarios">
+                                <div class="fila-dinamica fila-horario">
+                                    <input type="time" name="horario_hora[]" placeholder="Hora" aria-label="Hora">
+                                    <input type="text" name="horario_actividad[]" placeholder="Ej: Apertura de puertas"
+                                        aria-label="Actividad">
+                                    <button type="button" class="btn-quitar-fila" onclick="quitarFila(this)"
+                                        aria-label="Quitar horario"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-agregar-fila" onclick="agregarHorario()">
+                                <i class="fa-solid fa-plus"></i> Agregar horario
+                            </button>
+                        </section>
+
+                        <!-- 05 · Información útil -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">05</span>
+                                <h2 class="card-title">Información útil</h2>
+                                <span class="card-opt">opcional</span>
+                            </div>
+
+                            <div class="fila-info-fija">
+                                <div>
+                                    <label for="info_apto">Apto para</label>
+                                    <select name="info_apto" id="info_apto">
+                                        <option value="" {INFO_APTO_SIN_ESPECIFICAR_SELECTED}>—</option>
+                                        <option value="Todo público" {INFO_APTO_TODO_PUBLICO_SELECTED}>Todo público
+                                        </option>
+                                        <option value="Mayores de 18" {INFO_APTO_MAYORES_18_SELECTED}>Mayores de 18
+                                        </option>
+                                        <option value="Familiar / niños" {INFO_APTO_FAMILIAR_NINOS_SELECTED}>Familiar /
+                                            niños</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="info_duracion">Duración aproximada</label>
+                                    <input type="text" name="info_duracion" id="info_duracion" value="{INFO_DURACION}"
+                                        placeholder="Ej: ~5 horas">
+                                </div>
+                            </div>
+
+                            <div class="fila-info-fija">
+                                <div>
+                                    <label for="info_capacidad">Capacidad</label>
+                                    <input type="text" name="info_capacidad" id="info_capacidad"
+                                        value="{INFO_CAPACIDAD}" placeholder="Ej: 1.500 personas">
+                                </div>
+                                <div>
+                                    <label for="info_accesibilidad">Accesibilidad</label>
+                                    <select name="info_accesibilidad" id="info_accesibilidad">
+                                        <option value="" {INFO_ACCESIBILIDAD_SIN_ESPECIFICAR_SELECTED}>—</option>
+                                        <option value="Acceso para sillas de ruedas"
+                                            {INFO_ACCESIBILIDAD_SILLAS_RUEDAS_SELECTED}>Acceso para sillas de ruedas
+                                        </option>
+                                        <option value="Sin acceso adaptado" {INFO_ACCESIBILIDAD_SIN_ACCESO_SELECTED}>
+                                            Sin acceso adaptado</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="fila-info-fija">
+                                <div>
+                                    <label for="info_mascotas">Mascotas</label>
+                                    <select name="info_mascotas" id="info_mascotas">
+                                        <option value="" {INFO_MASCOTAS_SIN_ESPECIFICAR_SELECTED}>—</option>
+                                        <option value="Bienvenidas con correa" {INFO_MASCOTAS_BIENVENIDAS_SELECTED}>
+                                            Bienvenidas con correa</option>
+                                        <option value="No se permiten mascotas" {INFO_MASCOTAS_NO_PERMITIDAS_SELECTED}>
+                                            No se permiten mascotas</option>
+                                    </select>
+                                </div>
+                                <div></div>
+                            </div>
+
+                            <span class="label-suelto">Otros datos (opcional)</span>
+                            <div class="filas-dinamicas" id="lista-info-extra">
+                                <div class="fila-dinamica">
+                                    <input type="text" name="info_extra_clave[]" placeholder="Ej: Estacionamiento"
+                                        aria-label="Dato">
+                                    <input type="text" name="info_extra_valor[]" placeholder="Ej: Gratuito en el predio"
+                                        aria-label="Detalle">
+                                    <button type="button" class="btn-quitar-fila" onclick="quitarFila(this)"
+                                        aria-label="Quitar dato"><i class="fa-solid fa-xmark"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-agregar-fila" onclick="agregarInfoExtra()">
+                                <i class="fa-solid fa-plus"></i> Agregar otro dato
+                            </button>
+
+                            <div class="grupo-campo campo-adicion">
+                                <label for="adicion">A tener en cuenta</label>
+                                <textarea id="adicion" name="adicion" rows="3"
+                                    placeholder="Ej: Ingreso por orden de llegada. Se suspende por lluvia.">{adicion}</textarea>
+                            </div>
+                        </section>
+
+                        <!-- 06 · Contacto -->
+                        <section class="form-card">
+                            <div class="card-head">
+                                <span class="card-num">06</span>
+                                <h2 class="card-title">Contacto del organizador</h2>
+                                <span class="card-opt">opcional</span>
+                            </div>
+
+                            <div class="grid-2col">
+                                <div class="grupo-campo">
+                                    <label for="contacto_email">Email</label>
+                                    <input type="email" name="contacto_email" id="contacto_email"
+                                        value="{CONTACTO_EMAIL}" placeholder="hola@tuevento.com">
+                                </div>
+                                <div class="grupo-campo">
+                                    <label for="contacto_telefono">Teléfono</label>
+                                    <input type="tel" name="contacto_telefono" id="contacto_telefono"
+                                        value="{CONTACTO_TELEFONO}" placeholder="+54 11 4567-8900">
+                                </div>
+                            </div>
+                            <div class="grid-2col">
+                                <div class="grupo-campo">
+                                    <label for="contacto_instagram">Instagram</label>
+                                    <input type="text" name="contacto_instagram" id="contacto_instagram"
+                                        value="{CONTACTO_INSTAGRAM}" placeholder="@tuevento">
+                                </div>
+                                <div class="grupo-campo">
+                                    <label for="contacto_web">Sitio web</label>
+                                    <input type="text" name="contacto_web" id="contacto_web" value="{CONTACTO_WEB}"
+                                        placeholder="https://tuevento.com">
+                                </div>
+                            </div>
+                        </section>
+
+                        <div class="acciones-editar">
+                            <button type="submit" name="btn_editar" value="1" class="btn-submit">
+                                <i class="fa-regular fa-floppy-disk"></i> Guardar cambios
+                            </button>
+                            <a href="index.php?slug=panel" class="btn-cancelar">Cancelar</a>
+                        </div>
+
+                    </form>
+
+                    <a href="#" class="link-volver" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+                        <i class="fa-solid fa-arrow-up"></i> Volver arriba</a>
+                </div>
+
+                <!-- ============ VISTA PREVIA ============ -->
+                <aside class="pub-aside">
+                    <p class="aside-label">Vista previa</p>
+
+                    <article class="prev-card">
+                        <div class="prev-media" id="preview-box">
+                            <p class="preview-placeholder-text" id="preview-placeholder">
+                                <i class="fa-regular fa-image"></i>
+                                <span>La vista previa de tus imágenes aparecerá acá.</span>
+                            </p>
+                        </div>
+
+                        <div class="prev-body">
+                            <div class="prev-when">
+                                <i class="fa-regular fa-calendar"></i> <span id="prev-fecha">Fecha</span>
+                                <span class="prev-sep">·</span>
+                                <i class="fa-regular fa-clock"></i> <span id="prev-hora">Hora</span>
+                            </div>
+                            <h3 class="prev-title" id="prev-titulo">Título de tu evento</h3>
+                            <p class="prev-desc" id="prev-desc">Acá vas a ver cómo se lee la descripción en Explorar.
+                            </p>
+                            <div class="prev-loc">
+                                <i class="fa-solid fa-location-dot"></i> <span id="prev-localidad">Localidad</span>
+                            </div>
+                            <div class="prev-foot">
+                                <span class="prev-foot-label">Entrada</span>
+                                <strong class="prev-price free" id="prev-precio">Gratuito</strong>
+                            </div>
+                        </div>
+                    </article>
+
+                    <div class="tips-card">
+                        <p class="tips-title"><i class="fa-solid fa-circle-info"></i> Tips para destacar</p>
+                        <ul>
+                            <li>Usá una portada horizontal y luminosa.</li>
+                            <li>Sumá el line-up: genera más confirmaciones.</li>
+                            <li>Dejá un contacto para más información.</li>
+                        </ul>
+                    </div>
+
+                    <p class="aside-nota"><i class="fa-solid fa-shield-halved"></i> Cada detalle actualizado ayuda a
+                        que más personas se sumen al encuentro.</p>
+                </aside>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="public/js/navbar.js"></script>
+    <script src="public/js/toast.js"></script>
+    <script src="public/js/editar_evento.js"></script>
+</body>
+
+</html>

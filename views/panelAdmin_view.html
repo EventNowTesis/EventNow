@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventNow Panel Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;450;500;550;600;650;700;750;800&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="public/css/navbar.css">
+    <link rel="stylesheet" href="public/css/admin.css?v4">
+</head>
+
+<body class="logueado es-admin">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="index.php?slug=panelAdmin" class="logo">
+                <div class="logo-icon">
+                    <img src="public/imgs/logo1.png" alt="Logo EventNow">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-name">EventNow</span>
+                    <span class="logo-subtitle">EVENTOS URBANOS</span>
+                </div>
+            </a>
+
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMobileMenu(this)">
+                <i class="fa-solid fa-bars icon-open"></i>
+                <i class="fa-solid fa-xmark icon-close"></i>
+            </button>
+
+            <div class="navbar-menu">
+                <a href="index.php?slug=landing">Eventos</a>
+                <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+                <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+                <a href="index.php?slug=panelAdmin#seccion-usuarios" class="menu-solo-admin">Ver usuarios</a>
+                <a href="index.php?slug=logout" class="menu-solo-admin" onclick="return confirm('¿Seguro que querés cerrar sesión?');">Cerrar sesión</a>
+            </div>
+
+        </div>
+    </nav>
+
+    <main class="shell">
+
+        <section class="welcome">
+            <div class="eyebrow">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.017 2.814a1 1 0 0 1 1.966 0l1.051 5.558a2 2 0 0 0 1.594 1.594l5.558 1.051a1 1 0 0 1 0 1.966l-5.558 1.051a2 2 0 0 0-1.594 1.594l-1.051 5.558a1 1 0 0 1-1.966 0l-1.051-5.558a2 2 0 0 0-1.594-1.594l-5.558-1.051a1 1 0 0 1 0-1.966l5.558-1.051a2 2 0 0 0 1.594-1.594z"></path><path d="M20 2v4"></path><path d="M22 4h-4"></path><circle cx="4" cy="20" r="2"></circle></svg>
+                Detrás de cada gran evento
+            </div>
+            <h1>Tu ciudad, <em>en buenas manos.</em></h1>
+            <p>Revisá eventos, acompañá a los anfitriones y cuidá la comunidad.</p>
+        </section>
+
+        <!-- Los números se calculan en panelAdmin.js a partir de las filas de las tablas -->
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Solicitudes pendientes</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path></svg>
+                </div>
+                <div class="stat-number text-primary" id="statPendientes">–</div>
+                <div class="stat-foot"><span class="status-dot text-primary"></span>Esperando tu revisión</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Usuarios registrados</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                </div>
+                <div class="stat-number" id="statUsuarios">–</div>
+                <div class="stat-foot">Cuentas en el sistema</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Anfitriones</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" aria-hidden="true"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"></path><path d="M13 5v2"></path><path d="M13 17v2"></path><path d="M13 11v2"></path></svg>
+                </div>
+                <div class="stat-number" id="statAnfitriones">–</div>
+                <div class="stat-foot">Creando nuevos encuentros</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-top">
+                    <span>Cuentas activas</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="stat-icon" aria-hidden="true"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path d="m9 12 2 2 4-4"></path></svg>
+                </div>
+                <div class="stat-number" id="statActivas">–</div>
+                <div class="stat-foot text-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"></path></svg>
+                    Una comunidad en movimiento
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== Solicitudes de eventos pendientes ===== -->
+        <section class="section" id="seccion-pendientes">
+            <div class="section-heading section-heading-end">
+                <div>
+                    <div class="title-line">
+                        <h2>Solicitudes pendientes</h2>
+                        <span class="count" id="contadorPendientes">{CANTIDAD_PENDIENTES} por revisar</span>
+                    </div>
+                    <p class="section-description">Las próximas historias de la ciudad empiezan acá.</p>
+                </div>
+                <div class="section-meta">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6h4"></path></svg>
+                    Más recientes
+                </div>
+            </div>
+
+            {MSG}
+
+            <div class="tabla-container">
+                <div class="tabla-scroll">
+                    <table class="tabla-admin">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Organizador</th>
+                                <th>Fecha y Hora</th>
+                                <th>Estado</th>
+                                <th class="th-accion">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyPendientes">
+                            {EVENTOS_PENDIENTES}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-note">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+                    Los eventos se publican una vez aprobados por un administrador.
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Usuarios ===== -->
+        <section class="section" id="seccion-usuarios">
+            <div class="section-heading">
+                <div>
+                    <div class="title-line">
+                        <h2>Usuarios registrados</h2>
+                        <span class="count" id="contadorUsuarios">– usuarios</span>
+                    </div>
+                    <p class="section-description">Filtrá y gestioná las cuentas del sistema.</p>
+                </div>
+            </div>
+
+            <div class="user-controls">
+                <div class="filtros-roles-container" role="group" aria-label="Filtrar usuarios">
+                    <button type="button" class="filtro-card active" onclick="filtrarUsuarios('todos', '', this)" title="Ver sistema completo">Todos</button>
+                    <button type="button" class="filtro-card" onclick="filtrarUsuarios('rol', 'visitante', this)" title="Cuentas comunes">Visitantes</button>
+                    <button type="button" class="filtro-card" onclick="filtrarUsuarios('rol', 'anfitrion', this)" title="Cuentas creadoras">Anfitriones</button>
+                    <button type="button" class="filtro-card" onclick="filtrarUsuarios('rol', 'admin', this)" title="Cuentas gestoras">Admins</button>
+                    <button type="button" class="filtro-card" onclick="filtrarUsuarios('estado', 'desactivado', this)" title="Cuentas suspendidas">Desactivados</button>
+                </div>
+
+                <label class="search-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+                    <input type="search" id="buscadorUsuarios" class="buscador-input" name="buscar_usuarios_tabla" autocomplete="off" placeholder="Buscar por ID o email…" aria-label="Buscar por ID o email" onkeyup="buscarUsuarioTexto()">
+                </label>
+            </div>
+
+            <div class="tabla-container">
+                <div class="tabla-scroll">
+                    <table class="tabla-admin">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Rol</th>
+                                <th>Estado</th>
+                                <th>Fecha Registro</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {TABLA_USUARIOS}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <span id="contadorFiltrados"></span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">EventNow — EVENTOS URBANOS</footer>
+
+    <div id="modalPassword" class="modal-overlay">
+        <div class="modal-box">
+            <h3>Confirmar Acción</h3>
+            <p id="modalMensaje">Ingresá tu contraseña de administrador para continuar:</p>
+            <input type="text" id="adminPassInput" class="input-password-modal" autocomplete="off" placeholder="Contraseña..." onkeydown="if(event.key==='Enter'){ event.preventDefault(); enviarFormulario(); }">
+            <div class="modal-buttons">
+                <button type="button" class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button type="button" class="btn-confirmar" onclick="enviarFormulario()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="public/js/navbar.js"></script>
+    <script src="public/js/panelAdmin.js"></script>
+</body>
+
+</html>

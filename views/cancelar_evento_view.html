@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cancelar evento | EventNow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="public/css/stylesheet.css">
+    <link rel="stylesheet" href="public/css/navbar.css">
+    <link rel="stylesheet" href="public/css/cancelar_evento.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="index.php?slug=panel" class="logo">
+                <div class="logo-icon">
+                    <img src="public/imgs/logo1.png" alt="Logo EventNow">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-name">EventNow</span>
+                    <span class="logo-subtitle">EVENTOS URBANOS</span>
+                </div>
+            </a>
+
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+                onclick="toggleMobileMenu(this)">
+                <i class="fa-solid fa-bars icon-open"></i>
+                <i class="fa-solid fa-xmark icon-close"></i>
+            </button>
+
+            <div class="navbar-menu">
+                <a href="index.php?slug=landing">Eventos</a>
+                <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+                <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+            </div>
+
+            <div class="navbar-actions">
+                <!-- NOTIFICACIONES -->
+                <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+                    <div class="notification-icon">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+                    </div>
+
+                    <div class="dropdown-notifications">
+                        <h4>Notificaciones</h4>
+                        <ul>
+                            {LISTA_NOTIFICACIONES}
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+                    <div class="user-profile">
+                        <div class="user-profile-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>{USUARIO_NOMBRE}</span>
+                        <i class="fa-solid fa-chevron-down chevron-user"></i>
+                    </div>
+
+                    <div class="dropdown-user">
+                        <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+                            <i class="fa-solid fa-user"></i>
+                            Perfil
+                        </a>
+                        <a href="index.php?slug=mensajes" class="dropdown-user-item">
+                            <i class="fa-solid fa-comments"></i>
+                            Mensajes
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-gear"></i>
+                            Configuración
+                        </a>
+                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                            onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Cerrar sesión
+                        </a>
+                        <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+                            onclick="event.stopPropagation(); abrirModalEliminar();">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Eliminar mi cuenta
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+    <div class="modal-eliminar" id="modal-eliminar" hidden>
+        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+            <h3>Eliminar mi cuenta</h3>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
+            <div class="modal-eliminar-acciones">
+                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+            </div>
+        </form>
+    </div>
+    <main class="cancelar-page">
+
+        <a href="index.php?slug=panel" class="cancelar-back">
+            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+            Volver al panel
+        </a>
+
+        <section class="cancelar-card">
+
+            <h1 class="cancelar-title">Cancelar evento</h1>
+            <p class="cancelar-evento">{EVENTO_TITULO}</p>
+
+            <div class="cancelar-aviso">
+                <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+                <p>
+                    <strong>Importante:</strong> el evento dejará de estar publicado. Los usuarios que lo tenían en
+                    favoritos
+                    o confirmaron su asistencia van a recibir un aviso con el motivo, así que tenés que indicarlo para
+                    continuar.
+                </p>
+            </div>
+
+            {MENSAJE_ERROR}
+
+            <form method="POST" action="index.php?slug=cancelar_evento&id={ID_EVENTO}">
+
+                <label for="motivo_cancelacion" class="cancelar-label">¿Por qué querés cancelar el evento? *</label>
+                <textarea id="motivo_cancelacion" name="motivo_cancelacion" class="cancelar-textarea" minlength="10"
+                    maxlength="500" placeholder="Escribí el motivo de la cancelación (mínimo 10 caracteres)..."
+                    required>{MOTIVO}</textarea>
+
+                <div class="cancelar-botones">
+                    <a href="index.php?slug=panel" class="cancelar-btn cancelar-btn-volver">Volver</a>
+                    <button type="submit" name="btn_cancelar_evento" class="cancelar-btn cancelar-btn-confirmar"
+                        onclick="return confirm('¿Seguro que querés cancelar este evento?');">Confirmar
+                        cancelación</button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">EventNow — EVENTOS URBANOS</div>
+    </footer>
+
+    <script src="public/js/navbar.js"></script>
+</body>
+
+</html>

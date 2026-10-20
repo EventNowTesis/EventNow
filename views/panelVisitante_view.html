@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel visitante | EventNow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="public/css/navbar.css">
+    <link rel="stylesheet" href="public/css/filtros.css">
+    <link rel="stylesheet" href="public/css/panel_visitante.css">
+</head>
+
+<body class="{ESTADO_SESION} {ROL_CLASE}">
+
+    <nav class="navbar">
+        <div class="navbar-container">
+
+            <a href="index.php?slug=landing" class="logo">
+                <div class="logo-icon">
+                    <img src="public/imgs/logo1.png" alt="Logo EventNow">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-name">EventNow</span>
+                    <span class="logo-subtitle">EVENTOS URBANOS</span>
+                </div>
+            </a>
+
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+                onclick="toggleMobileMenu(this)">
+                <i class="fa-solid fa-bars icon-open"></i>
+                <i class="fa-solid fa-xmark icon-close"></i>
+            </button>
+
+            <div class="navbar-menu">
+                <a href="index.php?slug=landing">Eventos</a>
+                <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
+                <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
+            </div>
+
+            <div class="navbar-actions">
+                <!-- NOTIFICACIONES -->
+                <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
+                    <div class="notification-icon">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge-count {BADGE_CLASE}">{BADGE_NOTIFICACIONES}</span>
+                    </div>
+
+                    <div class="dropdown-notifications">
+                        <h4>Notificaciones</h4>
+                        <ul>
+                            {LISTA_NOTIFICACIONES}
+                        </ul>
+                    </div>
+                </div>
+                <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
+                    <div class="user-profile">
+                        <div class="user-profile-avatar">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <span>{USUARIO_NOMBRE}</span>
+                        <i class="fa-solid fa-chevron-down chevron-user"></i>
+                    </div>
+
+                    <div class="dropdown-user">
+                        <a href="index.php?slug={PERFIL_SLUG}" class="dropdown-user-item">
+                            <i class="fa-solid fa-user"></i>
+                            Perfil
+                        </a>
+                        <a href="index.php?slug=mensajes" class="dropdown-user-item">
+                            <i class="fa-solid fa-comments"></i>
+                            Mensajes
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-gear"></i>
+                            Configuración
+                        </a>
+                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                            onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                            Cerrar sesión
+                        </a>
+                        <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+                            onclick="event.stopPropagation(); abrirModalEliminar();">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Eliminar mi cuenta
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </nav>
+
+    <div class="modal-eliminar" id="modal-eliminar" hidden>
+        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+            <h3>Eliminar mi cuenta</h3>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
+            <div class="modal-eliminar-acciones">
+                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+            </div>
+        </form>
+    </div>
+
+    <main class="contenedor">
+
+
+        <section class="profile-header">
+            <div class="profile-avatar">
+                <i class="fa-regular fa-user"></i>
+            </div>
+
+            <div class="profile-info">
+                <h2>
+                    Hola, {USUARIO_NOMBRE}.
+                    <span class="role-badge">{USUARIO_ROL}</span>
+                </h2>
+
+                <p class="profile-tagline">Un lugar para guardar lo que no te querés perder.</p>
+
+                <p class="email">
+                    <i class="fa-regular fa-envelope"></i>
+                    {USUARIO_EMAIL}
+                </p>
+            </div>
+
+            <span class="profile-mark" aria-hidden="true">EN</span>
+        </section>
+
+        <div class="pv-section-label"><span>Tu actividad</span></div>
+
+        <section class="opciones">
+
+            <div class="opcion activa" onclick="mostrarContenido('favoritos', this)">
+                <div class="opcion-icono">
+                    <i class="fa-regular fa-heart"></i>
+                </div>
+                <div class="opcion-texto">
+                    <h3>Mis favoritos</h3>
+                    <p>Eventos que guardaste como favoritos.</p>
+                </div>
+                <i class="fa-solid fa-arrow-right opcion-flecha"></i>
+            </div>
+
+            <div class="opcion" onclick="mostrarContenido('calendario', this)">
+                <div class="opcion-icono">
+                    <i class="fa-regular fa-calendar-days"></i>
+                </div>
+                <div class="opcion-texto">
+                    <h3>Calendario</h3>
+                    <p>Mirá en el calendario los eventos a los que vas a asistir.</p>
+                </div>
+                <i class="fa-solid fa-arrow-right opcion-flecha"></i>
+            </div>
+
+        </section>
+
+        <!-- ============ FAVORITOS ============ -->
+        <section id="favoritos" class="contenido activo">
+            <div class="eventos-header">
+                <div>
+                    <span class="pv-eyebrow">Tu selección</span>
+                    <h3>Mis favoritos</h3>
+                    <p>Estos son los eventos que guardaste.</p>
+                </div>
+            </div>
+
+            <!-- Buscador + filtros: mismos que el landing (form GET, filtra el servidor).
+                 filtros.js los envía por AJAX y reemplaza solo #resultados-favoritos -->
+            <div class="filters-box" id="filtros-favoritos">
+                <form method="GET" action="index.php" id="form-filtros-favoritos"
+                    data-ajax-destino="#resultados-favoritos">
+                    <input type="hidden" name="slug" value="panelVisitante">
+
+                    <div class="search-container">
+                        <input type="text" name="buscar" class="search-input" placeholder="Buscar en favoritos..."
+                            value="{BUSQUEDA}" autocomplete="off" aria-label="Buscar en favoritos">
+                    </div>
+
+                    <div class="filters-grid">
+                        <div class="filter">
+                            <select class="filter-control" name="categoria" aria-label="Categoría">
+                                {OPCIONES_CATEGORIA}
+                            </select>
+                        </div>
+
+                        <div class="filter">
+                            <select class="filter-control" name="localidad" aria-label="Zona">
+                                {OPCIONES_ZONA}
+                            </select>
+                        </div>
+
+                        <div class="filter">
+                            <select class="filter-control" name="temporalidad" aria-label="Cuándo">
+                                {OPCIONES_TEMPORALIDAD}
+                            </select>
+                        </div>
+
+                        <div class="filter">
+                            <select class="filter-control" name="ranking" aria-label="Puntuación">
+                                {OPCIONES_RANKING}
+                            </select>
+                        </div>
+
+                        <div class="filter">
+                            <input type="date" class="filter-control" name="fecha_desde" value="{FECHA_DESDE}"
+                                aria-label="Fecha desde" title="Fecha desde">
+                        </div>
+
+                        <div class="filter">
+                            <input type="date" class="filter-control" name="fecha_hasta" value="{FECHA_HASTA}"
+                                aria-label="Fecha hasta" title="Fecha hasta">
+                        </div>
+                    </div>
+                </form>
+
+                <div class="filters-footer">
+                    <a href="index.php?slug=panelVisitante" class="link-limpiar-filtros">Limpiar filtros</a>
+                </div>
+            </div>
+
+            <!-- Todo lo que cambia al filtrar -->
+            <div id="resultados-favoritos">
+
+                <p class="event-counter">
+                    Mostrando <strong id="contador-resultados">{CANTIDAD_FILTRADOS}</strong> de
+                    <strong id="contador-total">{CANTIDAD_FAVORITOS}</strong> favoritos
+                </p>
+
+                <div class="eventos">
+                    {FAVORITOS}
+                </div>
+
+                <div class="empty-state" id="sin-resultados-favoritos" {SIN_RESULTADOS_HIDDEN}>
+                    <i class="fa-regular fa-heart"></i>
+                    <h3 id="sin-resultados-titulo">Sin resultados</h3>
+                    <p id="sin-resultados-texto">Ningún favorito coincide con tus filtros.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============ CALENDARIO ============ -->
+        <section id="calendario" class="contenido">
+            <div class="eventos-header">
+                <div>
+                    <span class="pv-eyebrow">En tu agenda</span>
+                    <h3>Calendario de eventos</h3>
+                    <p>Acá podés ver los eventos a los que confirmaste asistencia.</p>
+                </div>
+            </div>
+
+            <div class="calendario-barra">
+                <div class="controles-calendario">
+
+                    <button type="button" class="btn-calendario" onclick="cambiarMes(-1)" aria-label="Mes anterior">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+
+                    <select id="select-mes-calendario" onchange="seleccionarMes()" aria-label="Mes">
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                    </select>
+
+                    <select id="select-anio-calendario" onchange="seleccionarAnio()" aria-label="Año">
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
+
+                    <button type="button" class="btn-calendario" onclick="cambiarMes(1)" aria-label="Mes siguiente">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                </div>
+
+                <div class="volver-mes-actual">
+                    <button type="button" onclick="irAlMesActual()">
+                        <i class="fa-regular fa-calendar"></i>
+                        Volver a este mes
+                    </button>
+                </div>
+            </div>
+
+            <div class="contenedor-calendario">
+                {CALENDARIO}
+            </div>
+        </section>
+
+    </main>
+    <script src="public/js/navbar.js"></script>
+    <script src="public/js/filtros.js"></script>
+    <script src="public/js/panelVisitante.js"></script>
+
+</body>
+
+</html>

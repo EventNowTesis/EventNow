@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crear cuenta — EventNow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="public/css/register.css">
+  <link rel="stylesheet" href="public/css/toast.css">
+  <link rel="stylesheet" href="public/css/navbar.css">
+</head>
+
+<body>
+
+  <main class="register-layout">
+    <aside class="register-left">
+
+      <div class="bg-overlay"></div>
+      <div class="left-content">
+        <h2 class="font-serif">Conciertos, ferias y planes que no sabías que existían.</h2>
+        <ul class="features-list">
+          <li>
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            Eventos verificados en tu zona
+          </li>
+
+          <li>
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            Recordatorios antes de cada plan
+          </li>
+
+          <li>
+            <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+            Publicá tus propios eventos
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <div class="register-right">
+      <a href="index.php?slug=landing" class="brand-logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <span class="brand-logo-text">EventNow</span>
+      </a>
+      <h1 class="font-serif">Creá tu cuenta</h1>
+      <p class="description">Gratis, rápido, y sin spam. Solo planes buenos.</p>
+      <form action="index.php?slug=register" method="POST" enctype="multipart/form-data" autocomplete="on" onsubmit="return validateForm()">
+        <input type="hidden" name="txt_tipo_cuenta" id="txt_tipo_cuenta" value="" required>
+        <div class="form-group">
+          <span class="label-title">Tipo de cuenta</span>
+          <div class="custom-select-container" id="accountTypeSelect">
+            <div class="custom-select-trigger" id="selectTrigger" onclick="toggleDropdown()">
+              <div class="role-badge-icon" id="triggerIcon">
+                <i class="fa-regular fa-user" aria-hidden="true"></i>
+              </div>
+              <span class="trigger-text" id="selectedText">¿Cómo vas a usar EventNow?</span>
+              <i class="fa-solid fa-chevron-down chevron-icon" aria-hidden="true"></i>
+            </div>
+
+            <div class="custom-dropdown-menu">
+              <div class="dropdown-option" id="opt-visitante" onclick="selectRole('visitante', 'Cliente — quiero descubrir eventos')">
+                <div class="option-icon-box visitante">
+                  <i class="fa-regular fa-user" aria-hidden="true"></i>
+                </div>
+                <div>
+                  <span class="option-title">Cliente</span>
+                  <span class="option-desc">Descubrí eventos cerca tuyo y guardá tus favoritos.</span>
+                </div>
+                <i class="fa-solid fa-check check-icon" aria-hidden="true"></i>
+              </div>
+
+              <div class="dropdown-option" id="opt-anfitrion" onclick="selectRole('anfitrion', 'Organizador — quiero publicar eventos')">
+                <div class="option-icon-box anfitrion">
+                  <i class="fa-solid fa-ticket" aria-hidden="true"></i>
+                </div>
+                <div>
+                  <span class="option-title">Organizador</span>
+                  <span class="option-desc">Publicá tus eventos y llegá a más gente.</span>
+                </div>
+                <i class="fa-solid fa-check check-icon" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+
+          <p class="organizer-notice" id="organizerNotice">
+            Los eventos que publiques pasarán por revisión antes de mostrarse.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="txt_name" id="name-label">Nombre completo</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-user input-icon" aria-hidden="true"></i>
+            <input id="txt_name" name="txt_name" type="text" placeholder="Nombre público" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="txt_email">Email</label>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope input-icon" aria-hidden="true"></i>
+            <input id="txt_email" name="txt_email" type="email" placeholder="hola@tucorreo.com" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="txt_password">Contraseña</label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+            <input id="txt_password" name="txt_password" type="password" minlength="8" placeholder="Mínimo 8 caracteres" required>
+            <button type="button" class="toggle-pass" onclick="togglePasswordVisibility()" aria-label="Mostrar u ocultar contraseña">
+              <i class="fa-regular fa-eye" id="eye-icon" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="host-fields" class="host-fields hidden" style="display:none">
+          <div class="form-group">
+            <label for="txt_username">Nombre de usuario único</label>
+            <div class="input-wrapper">
+              <i class="fa-solid fa-at input-icon" aria-hidden="true"></i>
+              <input type="text" id="txt_username" name="txt_username" placeholder="username" pattern="[a-zA-Z0-9_]+" title="Solo letras, números y guiones bajos">
+            </div>
+            <span class="help-text">Tu nombre de usuario será único y aparecerá en tu perfil público.</span>
+          </div>
+        </div>
+        {msg_error}
+        <button name="btn_iniciar" class="btn-submit" type="submit">
+          Crear cuenta
+        </button>
+        <p class="terms-text">
+          Al registrarte aceptás los términos y la política de privacidad.
+        </p>
+      </form>
+
+      <div class="divider-box">
+        ¿Ya tenés cuenta? <a href="index.php?slug=login" class="login-link">Iniciá sesión</a>
+      </div>
+    </div>
+  </main>
+  <script src="public/js/register.js"></script>
+  <script src="public/js/toast.js"></script>
+</body>
+
+</html>

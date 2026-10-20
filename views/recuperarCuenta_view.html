@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recuperar cuenta | EventNow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="public/css/login.css">
+  <link rel="stylesheet" href="public/css/recuperarContra.css">
+</head>
+
+<body>
+
+  <main class="login-layout">
+    <div class="login-left">
+      <a href="index.php?slug=landing" class="brand-logo">
+        <div class="logo-icon">
+          <img src="public/imgs/logo1.png" alt="Logo EventNow">
+        </div>
+        <span class="brand-logo-text">EventNow</span>
+      </a>
+
+      <h1 class="font-serif">Recuperá tu cuenta</h1>
+      <p class="description">Si diste de baja tu cuenta hace menos de 15 días, ingresá tu correo y tu contraseña para
+        reactivarla.</p>
+
+      <form action="index.php?slug=recuperarCuenta" method="POST">
+
+        <div class="form-group">
+          <div class="label-header">
+            <label for="txt_email">Correo electrónico</label>
+          </div>
+          <div class="input-wrapper">
+            <i class="fa-regular fa-envelope input-icon" aria-hidden="true"></i>
+            <input id="txt_email" name="txt_email" type="email" autocomplete="email" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="label-header">
+            <label for="txt_pass">Contraseña</label>
+          </div>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock input-icon" aria-hidden="true"></i>
+            <input id="txt_pass" name="txt_pass" type="password" autocomplete="current-password" required>
+          </div>
+        </div>
+
+        <div id="msg__error">{msg_error}</div>
+        <div id="msg__exito">{msg_exito}</div>
+
+        <button class="btn-submit" type="submit">Recuperar cuenta</button>
+
+      </form>
+
+      <div class="divider-box">
+        <a href="index.php?slug=login" class="register-link">Volver al login</a>
+      </div>
+
+    </div>
+
+    <aside class="login-right">
+      <div class="bg-overlay"></div>
+      <div class="right-content">
+        <h2 class="font-serif">Tus eventos te esperan.</h2>
+        <p>Tenés 15 días desde la baja para volver. Después, la cuenta se elimina para siempre.</p>
+        <i class="fa-solid fa-rotate-left ticket-icon" aria-hidden="true"></i>
+      </div>
+    </aside>
+
+  </main>
+
+</body>
+
+</html>
