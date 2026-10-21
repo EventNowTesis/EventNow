@@ -2,10 +2,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var caja = document.querySelector(".chat-messages-box");
     var form = document.querySelector(".chat-input-wrapper");
 
-    /* ---------------------------------------------------------
-       Avatares con iniciales (lista de chats y cabecera del chat)
-       Se arman acá porque el HTML de las conversaciones lo genera el PHP.
-    --------------------------------------------------------- */
     function iniciales(nombre) {
         var palabras = (nombre || "").trim().split(/\s+/).filter(Boolean);
         if (palabras.length === 0) return "?";
@@ -38,9 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
         envoltorio.appendChild(infoDestinatario);
     }
 
-    /* ---------------------------------------------------------
-       Buscador rápido de conversaciones (filtra la lista sin recargar)
-    --------------------------------------------------------- */
     var buscador = document.getElementById("buscar-conversacion");
     var lista = document.querySelector(".chat-list-items");
 
@@ -65,12 +58,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    /* ---------------------------------------------------------
-       Desplegable propio para el filtro por evento.
-       El <select> original queda oculto dentro del contenedor y sigue siendo
-       el que manda el valor: al elegir una opción se dispara su "change"
-       (que ya envía el formulario).
-    --------------------------------------------------------- */
     function cerrarDesplegables() {
         document.querySelectorAll(".chat-select.open").forEach(function (el) {
             el.classList.remove("open");
@@ -149,11 +136,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e.key === "Escape") cerrarDesplegables();
     });
 
-    /* ---------------------------------------------------------
-       Chat: scroll al final + envío de mensajes (sin recargar)
-    --------------------------------------------------------- */
 
-    // Al abrir el chat, mostrar directamente los últimos mensajes
+    //al abrir el chat, mostrar directamente los últimos mensajes
     function irAbajo() {
         if (caja) caja.scrollTop = caja.scrollHeight;
     }
@@ -164,7 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
     var input = form.querySelector("input[name='texto_mensaje']");
     var boton = form.querySelector(".btn-send-chat");
 
-    // Arma la burbuja de un mensaje mío (mismas clases que usa el CSS)
     function agregarMensaje(texto, fecha) {
         var fila = document.createElement("div");
         fila.className = "mensaje-fila mensaje-propio";
@@ -194,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (texto === "") return;
 
         var datos = new FormData(form);
-        datos.append("enviar_mensaje", "1"); // el botón no se incluye solo en FormData
+        datos.append("enviar_mensaje", "1"); //el botón no se incluye solo en FormData
 
         boton.disabled = true;
 

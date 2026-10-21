@@ -1,8 +1,3 @@
-/* =========================================================
-   EventNow — Editar evento (mismo comportamiento que posts.js)
-   Autocontenido: no depende de mapa.js ni localidad.js
-========================================================= */
-
 const MIN_IMAGENES = 2;
 const MAX_IMAGENES = 6;
 
@@ -23,7 +18,6 @@ const inputUbicacion = document.getElementById('ubicacion');
 const inputLocalidad = document.getElementById('localidad');
 const estadoUbicacion = document.getElementById('estado-ubicacion');
 
-/* ---------- Vista previa en vivo ---------- */
 
 function formatearFecha(valor) {
     if (!valor) return 'Fecha';
@@ -49,12 +43,10 @@ function actualizarPreview() {
 actualizarPreview(); // arranca con los datos ya cargados del evento
 
 
-/* ---------- Imágenes: actuales + nuevas ---------- */
 
-let imagenes = [];     // archivos nuevos
+let imagenes = [];    
 let indiceActual = 0;
 
-// imágenes ya guardadas que NO están marcadas para quitar
 function actualesVigentes() {
     return Array.from(document.querySelectorAll('.img-actual')).filter(function (el) {
         const chk = el.querySelector('input[type="checkbox"]');
@@ -81,7 +73,6 @@ function mostrarCarrusel() {
         el.classList.toggle('quitada', !!(chk && chk.checked));
     });
 
-    // fuentes: nuevas primero en el carrusel, luego las actuales vigentes
     const fuentes = imagenes.map(function (f) {
         return { src: URL.createObjectURL(f), nueva: true };
     }).concat(actualesVigentes().map(function (el) {
@@ -104,7 +95,6 @@ function mostrarCarrusel() {
     img.src = fuentes[indiceActual].src;
     carrusel.appendChild(img);
 
-    // "Quitar" solo para las nuevas (las actuales se quitan con su checkbox)
     if (fuentes[indiceActual].nueva) {
         const btnBorrar = document.createElement('button');
         btnBorrar.type = 'button';
@@ -183,7 +173,6 @@ inputArchivo.addEventListener('change', function () {
     agregarArchivos(Array.from(this.files));
 });
 
-// tildar/destildar "Quitar" en una imagen actual refresca contador y preview
 document.querySelectorAll('.img-actual input[type="checkbox"]').forEach(function (chk) {
     chk.addEventListener('change', mostrarCarrusel);
 });
@@ -216,7 +205,6 @@ formEvento.addEventListener('submit', function (e) {
 mostrarCarrusel();
 
 
-/* ---------- Mapa ---------- */
 
 const lat0 = parseFloat(inputLat.value);
 const lon0 = parseFloat(inputLon.value);
@@ -252,7 +240,6 @@ function ponerMarcador(lat, lon) {
 
 if (tieneCoords) ponerMarcador(lat0, lon0);
 
-// coordenadas -> dirección + localidad
 function actualizarDireccion(lat, lon) {
     fetch('https://nominatim.openstreetmap.org/reverse?format=jsonv2&addressdetails=1&lat=' + lat + '&lon=' + lon)
         .then(function (r) { return r.json(); })
@@ -329,7 +316,6 @@ document.getElementById('btn_ubi').addEventListener('click', function () {
 });
 
 
-/* ---------- Filas dinámicas ---------- */
 
 const ICONO_QUITAR = '<i class="fa-solid fa-xmark"></i>';
 

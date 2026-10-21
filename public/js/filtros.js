@@ -93,8 +93,6 @@ function iniciarFiltros(form) {
   }
 }
 
-// En el landing, custom-select.js tiene que cargarse ANTES que este archivo:
-// así las zonas ya están en el <select> cuando se arma el desplegable.
 document.addEventListener("DOMContentLoaded", function () {
   var selects = document.querySelectorAll("select.filter-control");
   for (var i = 0; i < selects.length; i++) enhanceSelect(selects[i]);

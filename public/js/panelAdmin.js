@@ -1,7 +1,6 @@
 let formularioActual = null;
 let filtroActual = { tipo: 'todos', valor: '' };
 
-// ---------- Toasts ----------
 function mostrarToast(mensaje, tipo = 'exito') {
     const cont = document.getElementById('toast-container');
     const t = document.createElement('div');
@@ -12,7 +11,6 @@ function mostrarToast(mensaje, tipo = 'exito') {
     setTimeout(() => t.remove(), 3400);
 }
 
-// ---------- Modal de contraseña ----------
 function solicitarPassword(form, mensaje) {
     formularioActual = form;
     document.getElementById('modalMensaje').innerText = mensaje;
@@ -41,10 +39,8 @@ function enviarFormulario() {
     }
 }
 
-// ---------- Envío por fetch ----------
 document.addEventListener('submit', (e) => {
     const form = e.target;
-    // Si el onsubmit inline devolvió false (abrió el modal), no enviamos todavía
     if (!form.classList.contains('form-ajax') || e.defaultPrevented) return;
     e.preventDefault();
     enviarAjax(form);
@@ -115,7 +111,6 @@ function actualizarPendientes() {
     actualizarEstadisticas();
 }
 
-// ---------- Tarjetas de estadísticas (solo visual, se calculan desde las tablas) ----------
 function dosDigitos(n) {
     return String(n).padStart(2, '0');
 }
@@ -140,7 +135,6 @@ function actualizarEstadisticas() {
     poner('contadorUsuarios', total + (total === 1 ? ' usuario' : ' usuarios'));
 }
 
-// ---------- Filtros y buscador (combinados) ----------
 function aplicarFiltros() {
     const texto = document.getElementById('buscadorUsuarios').value.toLowerCase();
     let visibles = 0;
@@ -186,6 +180,5 @@ window.addEventListener('pageshow', () => {
     if (buscador) buscador.value = '';
 });
 
-// Estado inicial de las tarjetas y del pie de la tabla
 actualizarEstadisticas();
 aplicarFiltros();

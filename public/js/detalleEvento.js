@@ -21,9 +21,6 @@ function initReveal() {
 
 document.addEventListener("DOMContentLoaded", initReveal);
 
-// =========================================================
-// MAPA
-// =========================================================
 
 document.addEventListener('DOMContentLoaded', function () {
   var el = document.getElementById('mapa_detalle');
@@ -65,9 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// =========================================================
-// CONFIRMAR ASISTENCIA
-// =========================================================
 
 const btnConfirmar = document.getElementById('btn-confirmar');
 
@@ -94,15 +88,11 @@ if (btnConfirmar) {
         btnConfirmar.classList.remove('confirmado');
       }
     } catch (err) {
-      // Si no hay sesión, index.php devuelve HTML y el JSON falla
+      //si no hay sesión, index.php devuelve HTML y el JSON falla
       window.location.href = 'index.php?slug=login';
     }
   });
 }
-
-// =========================================================
-// QR
-// =========================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -132,9 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-// =========================================================
-// PDF
-// =========================================================
 
 document.addEventListener("DOMContentLoaded", function () {
 
@@ -189,10 +176,8 @@ function generarPDF(botonPDF) {
   var meta = document.querySelectorAll(".detail-meta li");
   var imagen = document.querySelector(".detail-hero-image img");
 
-  // Contenedor temporal fuera de pantalla
   var pdfContainer = document.createElement("div");
 
-  // Los estilos nuevos viven bajo .detail-page: se la damos al contenedor temporal
   pdfContainer.className = "detail-page";
 
   estilos(pdfContainer, {
@@ -207,7 +192,6 @@ function generarPDF(botonPDF) {
     color: "#1A1A1A"
   });
 
-  // ---------- Cabecera ----------
 
   var cabecera = document.createElement("div");
 
@@ -298,7 +282,6 @@ function generarPDF(botonPDF) {
   cabecera.appendChild(datos);
   pdfContainer.appendChild(cabecera);
 
-  // ---------- Contenido (grilla clonada) ----------
 
   var contenidoGrid = eventoOriginal.querySelector(".detail-grid");
 
@@ -306,34 +289,18 @@ function generarPDF(botonPDF) {
 
     var contenidoClonado = contenidoGrid.cloneNode(true);
 
-    // Eliminamos el mapa del clon
     var mapaPDF = contenidoClonado.querySelector("#mapa_detalle");
     if (mapaPDF) mapaPDF.remove();
 
-    /*
-    | Quitamos lo marcado con data-no-pdf (comentarios, favorito, etc.).
-    | La tarjeta "Compartí este plan" (.detail-share) SÍ se conserva:
-    | es la que muestra el QR en el PDF, aunque tenga data-no-pdf.
-    */
     contenidoClonado.querySelectorAll("[data-no-pdf]").forEach(function (elemento) {
       if (elemento.classList.contains("detail-share")) return;
       elemento.remove();
     });
 
-    // Botones que no tienen sentido en un PDF
     contenidoClonado.querySelectorAll(".detail-confirm, #btn-descargar-pdf").forEach(function (elemento) {
       elemento.remove();
     });
 
-    // Si tampoco querés los botones redondos de compartir en el PDF,
-    // descomentá esto:
-    // contenidoClonado.querySelectorAll(".share-buttons").forEach(function (el) { el.remove(); });
-
-    /*
-    | El clon trae el #qr-evento con un canvas (que no se copia pintado)
-    | y un img. Lo reemplazamos por una sola imagen con el mismo src,
-    | y le quitamos el id para no repetirlo en el documento.
-    */
     var qrClon = contenidoClonado.querySelector("#qr-evento");
     var qrImgOriginal = document.querySelector("#qr-evento img");
 
@@ -353,10 +320,6 @@ function generarPDF(botonPDF) {
       qrClon.appendChild(qrCopia);
     }
 
-    /*
-    | Liberamos alturas/overflow en el clon (sin el mapa, el contenedor
-    | de "Cómo llegar" podía cortar la dirección) y mostramos los .reveal.
-    */
     contenidoClonado.querySelectorAll("*").forEach(function (elemento) {
 
       var tag = elemento.tagName.toLowerCase();
@@ -438,7 +401,7 @@ function esperarImagenes(contenedor, callback) {
 
 }
 
-// genera PDF (una sola página)
+// genera PDF 
 
 function crearPDFDesdeContenedor(pdfContainer, botonPDF, eventoOriginal) {
 
@@ -466,10 +429,6 @@ function crearPDFDesdeContenedor(pdfContainer, botonPDF, eventoOriginal) {
     var altoDisponible = altoPagina - (margen * 2);
     var altoContenido = canvas.height * anchoContenido / canvas.width;
 
-    /*
-    | Si es más alto que la hoja, se achica
-    | proporcionalmente para que entre en 1 página.
-    */
     if (altoContenido > altoDisponible) {
       var escala = altoDisponible / altoContenido;
       altoContenido = altoDisponible;
@@ -506,10 +465,6 @@ function crearPDFDesdeContenedor(pdfContainer, botonPDF, eventoOriginal) {
 
 }
 
-// =========================================================
-// CARRUSEL
-// =========================================================
-
 document.addEventListener('DOMContentLoaded', function () {
   var carousel = document.getElementById('carousel-evento');
   if (!carousel) return;
@@ -520,7 +475,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var btnNext = carousel.querySelector('.carousel-next');
   var dotsBox = carousel.querySelector('.carousel-dots');
   var contador = document.querySelector('#carousel-count b');
-  // con una sola imagen no hace falta nada
   if (slides.length < 2) {
     btnPrev.remove();
     btnNext.remove();
@@ -553,7 +507,6 @@ document.addEventListener('DOMContentLoaded', function () {
   btnPrev.addEventListener('click', function () { ir(actual - 1); });
   btnNext.addEventListener('click', function () { ir(actual + 1); });
 
-  // swipe en celular
   var inicioX = 0;
   carousel.addEventListener('touchstart', function (e) {
     inicioX = e.touches[0].clientX;
@@ -567,15 +520,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-// =========================================================
-// COMENTARIOS + COMPARTIR
-// =========================================================
-// OJO: los comentarios viven solo en memoria (se pierden al recargar).
-// Para guardarlos hay que conectarlos al backend (ver "comments" abajo).
-
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ---------- Aviso flotante ---------- */
 
   var notice = document.getElementById('notice');
   var noticeTimer;
@@ -588,7 +534,6 @@ document.addEventListener('DOMContentLoaded', function () {
     noticeTimer = setTimeout(function () { notice.hidden = true; }, 3500);
   }
 
-  /* ---------- Compartir ---------- */
 
   function tituloEvento() {
     var t = document.querySelector('.detail-title');
@@ -642,7 +587,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 
-  /* ---------- Comentarios ---------- */
 
   var list = document.getElementById('comment-list');
   var draft = document.getElementById('comment-draft');
@@ -652,12 +596,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var meAvatar = document.getElementById('comment-me');
   if (!list || !draft || !publish || !sortSelect) return;
 
-  /*
-  | Lista de comentarios. Formato de cada uno:
-  | { id, author, initials, tone: ''|'sage'|'lilac', text, time, likes,
-  |   answers: [ { id, author, initials, organizer?: true, text, to, time } ] }
-  | Para cargarlos desde tu backend, rellená este array antes del render().
-  */
   var comments = [];
 
   var liked = new Set();
@@ -669,7 +607,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Nombre del usuario logueado (el de la navbar)
   function nombreUsuario() {
     var el = document.querySelector('.user-profile span');
     var t = el ? el.textContent.trim() : '';
@@ -740,7 +677,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function render() {
-    // conservar lo que se esté escribiendo en la respuesta abierta
     var prev = document.getElementById('reply-draft');
     var prevText = prev ? prev.value : '';
 
@@ -816,7 +752,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (action === 'reply') {
       var old = document.getElementById('reply-draft');
-      if (old) old.value = ''; // otra respuesta distinta: empieza vacía
+      if (old) old.value = ''; 
       replying = { id: id, to: b.dataset.to };
       render();
       var nuevo = document.getElementById('reply-draft');

@@ -251,7 +251,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
     );
 
     if (!$resultado) {
-        // si no se guardó en la base, borramos la carpeta con las imágenes
+        //si no se guardó en la base, borramos la carpeta con las imágenes
         array_map('unlink', glob($rutaCarpetaEvento . '*'));
         rmdir($rutaCarpetaEvento);
         echo "No se pudo guardar la publicación.";

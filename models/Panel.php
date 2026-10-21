@@ -3,10 +3,6 @@
 require_once __DIR__ . '/DBAbstract.php';
 
 
-/* =========================================================
-   FAVORITOS Y ASISTENCIAS
-   ========================================================= */
-
 function obtenerIdsFavoritosUsuario($id_usuario) {
 
     $db = dbConnect();
@@ -170,9 +166,9 @@ function toggleAsistenciaUsuario($id_usuario, $id_evento) {
 
 
 function getFavoritosVisitante($id_usuario) {
- 
+
     $db = dbConnect();
- 
+
     $sql = "SELECT e.*,
                    (SELECT AVG(v.estrellas)
                       FROM valoraciones_eventos v
@@ -186,93 +182,80 @@ function getFavoritosVisitante($id_usuario) {
             WHERE f.id_usuario = ?
             AND f.estado = 'agregado'
             AND e.estado = 'aprobado'";
- 
+
     $stmt = $db->prepare($sql);
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
- 
+
     $eventos = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
- 
+
     return $eventos;
 }
- 
- 
-/* ---------- 2) Funciones nuevas para filtrar favoritos ---------- */
- 
-// minúsculas y sin tildes, para que "musica" encuentre "Música"
+
 function normalizarTextoFiltro($texto) {
- 
+
     $texto = mb_strtolower((string) $texto, 'UTF-8');
- 
+
     return strtr($texto, [
         'á' => 'a', 'é' => 'e', 'í' => 'i', 'ó' => 'o',
         'ú' => 'u', 'ü' => 'u', 'ñ' => 'n'
     ]);
 }
- 
-// Devuelve la fecha si es un AAAA-MM-DD válido; si no, ''
+
 function normalizarFechaFiltro($fecha) {
- 
+
     if ($fecha === '') {
         return '';
     }
- 
+
     $obj = DateTime::createFromFormat('Y-m-d', $fecha);
- 
+
     return ($obj && $obj->format('Y-m-d') === $fecha) ? $fecha : '';
 }
- 
-// Zona/localidad de un evento.
-// Si tu columna se llama distinto, cambialo SOLO acá.
+
 function zonaDeEventoFavorito($evento) {
- 
+
     return trim((string) ($evento['localidad'] ?? $evento['zona'] ?? ''));
 }
- 
-// Zonas distintas de los favoritos, ordenadas: ['Palermo' => 'Palermo', ...]
+
 function obtenerZonasFavoritos($eventos) {
- 
+
     $zonas = [];
- 
+
     foreach ($eventos as $evento) {
- 
+
         $zona = zonaDeEventoFavorito($evento);
- 
+
         if ($zona !== '') {
             $zonas[$zona] = $zona;
         }
     }
- 
+
     ksort($zonas);
- 
+
     return $zonas;
 }
- 
-// Arma los <option> de un select y marca el seleccionado
+
 function armarOpcionesSelect($opciones, $seleccionado) {
- 
+
     $html = '';
- 
+
     foreach ($opciones as $valor => $etiqueta) {
- 
+
         $selected = ((string) $valor === (string) $seleccionado) ? ' selected' : '';
- 
+
         $html .= "<option value='"
             . htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8') . "'{$selected}>"
             . htmlspecialchars((string) $etiqueta, ENT_QUOTES, 'UTF-8')
             . "</option>";
     }
- 
+
     return $html;
 }
- 
-/**
- * Aplica a los favoritos los mismos filtros que el landing.
- * $filtros: buscar, categoria, localidad, ranking, fecha_desde, fecha_hasta, temporalidad
- */
+
 function filtrarFavoritosVisitante($eventos, $filtros) {
- 
+
     $buscar       = normalizarTextoFiltro($filtros['buscar'] ?? '');
     $categoria    = $filtros['categoria'] ?? '';
     $localidad    = $filtros['localidad'] ?? '';
@@ -280,66 +263,66 @@ function filtrarFavoritosVisitante($eventos, $filtros) {
     $fechaDesde   = $filtros['fecha_desde'] ?? '';
     $fechaHasta   = $filtros['fecha_hasta'] ?? '';
     $temporalidad = $filtros['temporalidad'] ?? 'todos';
- 
+
     $puntuacionMinima = ($ranking !== '') ? (float) $ranking : null;
     $hoy = date('Y-m-d');
- 
+
     $resultado = [];
- 
+
     foreach ($eventos as $evento) {
- 
+
         $fecha = substr((string) ($evento['fecha'] ?? ''), 0, 10);
- 
+
         if ($buscar !== '') {
- 
+
             $texto = normalizarTextoFiltro(implode(' ', [
                 $evento['titulo'] ?? '',
                 $evento['descripcion'] ?? '',
                 $evento['categoria'] ?? '',
                 zonaDeEventoFavorito($evento)
             ]));
- 
+
             if (mb_strpos($texto, $buscar) === false) {
                 continue;
             }
         }
- 
+
         if ($categoria !== '' && ($evento['categoria'] ?? '') !== $categoria) {
             continue;
         }
- 
+
         if ($localidad !== '' && zonaDeEventoFavorito($evento) !== $localidad) {
             continue;
         }
- 
+
         if ($puntuacionMinima !== null) {
- 
+
             $promedio = $evento['promedio_valoracion'] ?? null;
- 
+
             if ($promedio === null || (float) $promedio < $puntuacionMinima) {
                 continue;
             }
         }
- 
+
         if ($fechaDesde !== '' && ($fecha === '' || $fecha < $fechaDesde)) {
             continue;
         }
- 
+
         if ($fechaHasta !== '' && ($fecha === '' || $fecha > $fechaHasta)) {
             continue;
         }
- 
+
         if ($temporalidad === 'vigentes' && $fecha < $hoy) {
             continue;
         }
- 
+
         if ($temporalidad === 'pasados' && $fecha >= $hoy) {
             continue;
         }
- 
+
         $resultado[] = $evento;
     }
- 
+
     return $resultado;
 }
 
@@ -377,9 +360,6 @@ function fechaCortaEvento($fecha)
     return (int) date('j', $ts) . ' de ' . $meses[(int) date('n', $ts) - 1] . ' de ' . date('Y', $ts);
 }
 
-/* =========================================================
-   TARJETAS Y CALENDARIO
-   ========================================================= */
 
 function generarHtmlTarjetasEventos($eventos, $tipoSeccion = 'general') {
 
@@ -499,7 +479,6 @@ function generarCalendarioAnual($eventos) {
     $añoInicial = $añoActual - 10;
     $añoFinal   = $añoActual + 10;
 
-    // Agrupar eventos por fecha
     $eventosPorFecha = [];
 
     foreach ($eventos as $evento) {
@@ -525,7 +504,6 @@ function generarCalendarioAnual($eventos) {
 
             $cantidadDias = (int) $fechaInicio->format('t');
 
-            // N = lunes 1 ... domingo 7
             $primerDiaSemana = (int) $fechaInicio->format('N');
 
             $nombreMes = $meses[$mes];
@@ -636,9 +614,6 @@ function generarCalendarioAnual($eventos) {
 }
 
 
-/* =========================================================
-   VALORACIONES: lógica (consultas y permisos)
-   ========================================================= */
 
 function usuarioAsistioEvento($id_usuario, $id_evento)
 {
@@ -714,9 +689,7 @@ function puedeValorarEvento($id_usuario, $id_evento)
 }
 
 
-/**
- * Obtiene la valoración que ya hizo un usuario sobre un evento.
- */
+
 function obtenerValoracionUsuario($id_usuario, $id_evento)
 {
     $db = dbConnect();
@@ -878,10 +851,6 @@ function obtenerResumenValoraciones($id_evento)
     ];
 }
 
-
-/**
- * Obtiene todos los comentarios de un evento.
- */
 function obtenerValoracionesEvento($id_evento)
 {
     $db = dbConnect();
@@ -918,9 +887,6 @@ function obtenerValoracionesEvento($id_evento)
 }
 
 
-/**
- * Genera las estrellas visuales.
- */
 function generarEstrellasValoracion($estrellas)
 {
     $estrellas = (int) $estrellas;
@@ -1114,12 +1080,6 @@ function guardarRespuestaValoracion($id_usuario, $id_evento, $id_valoracion, $re
 }
 
 
-/* =========================================================
-   VALORACIONES: HTML con el diseño de comentarios
-   ========================================================= */
-
-/* ---------- helpers chicos ---------- */
-
 function valH($texto)
 {
     return htmlspecialchars((string) $texto, ENT_QUOTES, 'UTF-8');
@@ -1141,6 +1101,18 @@ function valFecha($fecha)
     return $ts ? date('d/m/Y', $ts) : (string) $fecha;
 }
 
+function valEditado($creada, $modificada)
+{
+    $tsCreada     = strtotime((string) $creada);
+    $tsModificada = strtotime((string) $modificada);
+
+    if (!$tsModificada || $tsModificada <= 0) {
+        return '';
+    }
+
+    return (!$tsCreada || $tsModificada > $tsCreada) ? ' · Editado' : '';
+}
+
 function generarHtmlAvisoValoracion($icono, $titulo, $texto)
 {
     return "
@@ -1155,7 +1127,6 @@ function generarHtmlAvisoValoracion($icono, $titulo, $texto)
 }
 
 
-/* ---------- LISTA de valoraciones ---------- */
 
 function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
 {
@@ -1173,6 +1144,7 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
         $nombre       = valH($valoracion['display_name'] ?: 'Usuario');
         $iniciales    = valH(valIniciales($valoracion['display_name'] ?: 'Usuario'));
         $fecha        = valH(valFecha($valoracion['fecha_valoracion'] ?? ''));
+        $editado      = valEditado($valoracion['fecha_valoracion'] ?? '', $valoracion['fecha_modificacion'] ?? '');
         $comentario   = valH($valoracion['comentario'] ?? '');
         $cantEstrellas = (int) $valoracion['estrellas'];
         $estrellas    = generarEstrellasValoracion($cantEstrellas);
@@ -1184,7 +1156,7 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
                     <div class='cmt-avatar'>{$iniciales}</div>
                     <div>
                         <div class='cmt-author'>{$nombre}</div>
-                        <div class='cmt-time'>{$fecha}</div>
+                        <div class='cmt-time'>{$fecha}{$editado}</div>
                     </div>
                 </div>
 
@@ -1195,7 +1167,6 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
             $html .= "<p class='cmt-text'>{$comentario}</p>";
         }
 
-        /* Respuesta del organizador */
 
         $respuesta = obtenerRespuestaValoracion($idValoracion);
 
@@ -1205,6 +1176,7 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
             $inicialesOrg = valH(valIniciales($respuesta['display_name'] ?: 'Organizador'));
             $textoResp    = valH($respuesta['respuesta'] ?? '');
             $fechaResp    = valH(valFecha($respuesta['fecha_respuesta'] ?? ''));
+            $editadoResp  = valEditado($respuesta['fecha_respuesta'] ?? '', $respuesta['fecha_modificacion'] ?? '');
 
             $html .= "
                 <div class='cmt-replies'>
@@ -1219,7 +1191,7 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
                             <div class='cmt-avatar org'>{$inicialesOrg}</div>
                             <div>
                                 <div class='cmt-author'>{$nombreOrg}<span class='cmt-badge'>Anfitrión</span></div>
-                                <div class='cmt-time'>{$fechaResp}</div>
+                                <div class='cmt-time'>{$fechaResp}{$editadoResp}</div>
                             </div>
                         </div>
 
@@ -1230,7 +1202,6 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
             ";
         }
 
-        /* Formulario de respuesta (solo lo ve el organizador) */
 
         $html .= generarHtmlFormularioRespuestaValoracion(
             $id_usuario,
@@ -1247,16 +1218,15 @@ function generarHtmlValoracionesEvento($id_evento, $id_usuario = 0)
 }
 
 
-/* ---------- FORMULARIO para valorar (o aviso si todavía no se puede) ---------- */
 
 function generarHtmlFormularioValoracion($id_usuario, $id_evento, $yaPaso = true)
 {
-    // El organizador no se valora a sí mismo
+    //organizador no se valora a sí mismo
     if (esOrganizadorDelEvento($id_usuario, $id_evento)) {
         return '';
     }
 
-    // El evento todavía no terminó
+    //el evento todavía no terminó
     if (!$yaPaso) {
         return generarHtmlAvisoValoracion(
             'fa-clock',
@@ -1265,7 +1235,7 @@ function generarHtmlFormularioValoracion($id_usuario, $id_evento, $yaPaso = true
         );
     }
 
-    // Ya terminó, pero esta persona no confirmó asistencia
+    //ya terminó, pero esta persona no confirmó asistencia
     if (!puedeValorarEvento($id_usuario, $id_evento)) {
         return generarHtmlAvisoValoracion(
             'fa-circle-check',
@@ -1295,7 +1265,6 @@ function generarHtmlFormularioValoracion($id_usuario, $id_evento, $yaPaso = true
                 <div class='estrellas-input'>
     ";
 
-    // De 5 a 1 para que funcione el row-reverse del CSS
     for ($i = 5; $i >= 1; $i--) {
 
         $checked = ($i === $estrellasSeleccionadas) ? ' checked' : '';
@@ -1332,7 +1301,6 @@ function generarHtmlFormularioValoracion($id_usuario, $id_evento, $yaPaso = true
 }
 
 
-/* ---------- FORMULARIO de respuesta del organizador ---------- */
 
 function generarHtmlFormularioRespuestaValoracion($id_usuario, $id_evento, $id_valoracion)
 {
@@ -1374,7 +1342,6 @@ function generarHtmlFormularioRespuestaValoracion($id_usuario, $id_evento, $id_v
 }
 
 
-/* ---------- SECCIÓN COMPLETA (la llama el controller) ---------- */
 
 function generarHtmlSeccionValoraciones($id_evento, $id_usuario, $yaPaso, $mensajesHtml = '')
 {

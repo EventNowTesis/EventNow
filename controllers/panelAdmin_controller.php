@@ -141,7 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 $eventosPendientes = getEventosPendientes();
 $cantidadPendientes = count($eventosPendientes);
 
-// ---------- Íconos y helpers para la tabla de solicitudes ----------
 $svgBase = "xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'";
 
 $iconos = [
@@ -173,7 +172,6 @@ if (empty($eventosPendientes)) {
 
         $cambios = getCambiosPendientesPorCampo($e);
 
-        // Etiqueta + ícono según el tipo de solicitud
         if ($e['estado'] === 'modificado') {
             $textoEstado = 'Modificado';
             $ico = $iconos['cambios'];
@@ -195,7 +193,6 @@ if (empty($eventosPendientes)) {
             $subtitulo = ($subtitulo !== '' ? $subtitulo . ' · ' : '') . e($e['ultimo_cambio']);
         }
 
-        // Si el campo cambió se muestra marcado (nuevo + anterior tachado); si no, formato limpio
         $tituloHtml = marcarCambio('titulo', $e['titulo'], $cambios);
         $fechaHtml  = isset($cambios['fecha'])
             ? marcarCambio('fecha', $e['fecha'], $cambios)

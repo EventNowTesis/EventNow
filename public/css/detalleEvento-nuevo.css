@@ -4,23 +4,49 @@
    (pisa los estilos viejos sin borrar nada)
    ========================================================= */
 /* ===== BASE mínima del detalle (por si falta detalleEvento.css) ===== */
-.detail-page { max-width: 1040px; margin: 0 auto; padding: 32px 24px 64px; }
+.detail-page { margin: 0 auto; padding: 32px 24px 64px;}
 
-.detail-hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; }
+.detail-hero { display: grid;}
 .detail-hero-image { position: relative; overflow: hidden; }
 .detail-hero-info { display: flex; flex-direction: column; }
 
 .carousel { position: relative; height: 100%; overflow: hidden; }
 .carousel-track { display: flex; height: 100%; transition: transform 0.4s ease; }
-.carousel-slide { flex: 0 0 100%; min-width: 100%; height: 100%; }
-.carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--cream-soft, #f5eee3); /* relleno si no hay imagen de fondo */
+}
+
+/* Relleno: la misma foto, agrandada y desenfocada, detrás */
+.carousel-slide::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background-image: var(--slide-bg, none);
+  background-size: cover;
+  background-position: center;
+  filter: blur(22px);
+}
+
+/* La foto completa, sin recortar, dentro del mismo contenedor */
+.carousel-slide img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
 
 .detail-meta { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .detail-meta li { display: flex; }
 
 .detail-cta-box { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 
-.detail-grid { display: grid; gap: 36px; }
+.detail-grid { display: grid;}
 .detail-main { display: flex; flex-direction: column; }
 .detail-sidebar { display: flex; flex-direction: column; gap: 20px; }
 
@@ -32,20 +58,7 @@
 .detail-card-note { background: var(--cream-soft, #f5f0ea); }
 
 .detail-list, .detail-contact, .detail-facts { list-style: none; margin: 0; padding: 0; }
-.detail-facts li {
-  display: grid;
-  grid-template-columns: 8.5rem 1fr; /* etiqueta con ancho fijo, valor ocupa el resto */
-  column-gap: 16px;
-  align-items: start;
-  padding: 6px 0;
-  font-size: 13px;
-}
-.detail-facts li span { white-space: nowrap; }
-.detail-facts li strong {
-  text-align: right;
-  font-weight: 700;
-  overflow-wrap: anywhere; /* direcciones largas no rompen el layout */
-}
+.detail-facts li { display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; font-size: 13px; }
 .detail-contact li { padding: 4px 0; font-size: 13px; }
 .detail-page { max-width: 1040px; }
 
@@ -113,8 +126,6 @@
 
 .detail-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
 .detail-title { font-size: 34px; line-height: 1.1; }
-
-
 
 .detail-subtitle { margin: 0; font-size: 14.5px; line-height: 1.5; color: var(--ink-soft, #6b6159); }
 
@@ -380,7 +391,6 @@
   .cmt-reply-composer { margin-left: 8px; }
 }
 
-
 /* =========================================================
    VALORACIONES con el diseño de comentarios
    ========================================================= */
@@ -403,8 +413,31 @@
 .cmt-form-title { font-size: 14px; font-weight: 600; color: var(--ink, #1a1a1a); margin-bottom: 12px; }
 .cmt-rating-form .selector-estrellas { margin: 0 0 14px; }
 .cmt-rating-form .selector-estrellas > label { font-size: 12.5px; font-weight: 600; color: var(--ink-soft, #6b6159); margin-bottom: 6px; }
-.cmt-rating-form .estrellas-input { position: relative; }
-.cmt-rating-form .estrellas-input label { font-size: 24px; }
+/* El PHP imprime las estrellas de 5 a 1: row-reverse las muestra de 1 a 5 y
+   el selector "~" pinta la elegida y todas las de su izquierda. */
+.cmt-rating-form .estrellas-input {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.cmt-rating-form .estrellas-input label {
+  font-size: 24px;
+  line-height: 1;
+  color: #d9d1c7;
+  cursor: pointer;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+.cmt-rating-form .estrellas-input label:hover { transform: scale(1.12); }
+.cmt-rating-form .estrellas-input input:checked ~ label,
+.cmt-rating-form .estrellas-input label:hover,
+.cmt-rating-form .estrellas-input label:hover ~ label { color: var(--rust, #a8432f); }
+.cmt-rating-form .estrellas-input input:focus-visible + label {
+  outline: 2px solid var(--rust, #a8432f);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 /* el radio queda invisible pero "enfocable", así el navegador puede avisar si falta elegir estrellas */
 .estrellas-input input {
   display: block;
@@ -490,7 +523,6 @@
   .card-contacto-organizador .btn-contacto { width: 100%; justify-content: center; }
 }
 
-
 /* =========================================================
    ENTRADA: centrada, "Gratis" en verde
    ========================================================= */
@@ -570,7 +602,6 @@ body.es-admin .card-contacto-organizador {
 .cambios-lista .cambio-antes {
   color: var(--ink-faint, #9a8f84);
 }
-
 
 /* =========================================================
    PANEL DE REVISIÓN DEL ADMIN (detalleEvento)
@@ -939,20 +970,68 @@ body.es-admin .card-contacto-organizador {
     transition: none;
   }
 }
-body.vista-anfitrion .card-contacto-organizador {
-  display: none !important;
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line, #ebe3d6);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink, #221d18);
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: var(--shadow-card, none);
+  transition: background 0.15s ease, color 0.15s ease;
 }
-/* Fila: etiqueta superior + corazón de favoritos */
-.detail-eyebrow-row {
+.carousel-btn:hover { background: var(--rust, #a8462e); color: #fff; }
+.carousel-prev { left: 12px; }
+.carousel-next { right: 12px; }
+
+.carousel-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 12px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.carousel-dots > * {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  pointer-events: auto;
+  cursor: pointer;
+}
+.carousel-dots > .active,
+.carousel-dots > .is-active,
+.carousel-dots > [aria-current="true"] { background: #fff; transform: scale(1.25); }
+
+.detail-fav {
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--line, #e7e0d6);
+  background: var(--surface, #fff);
+  color: var(--ink-soft, #6b6159);
+  cursor: pointer;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  transition: color 0.15s ease, border-color 0.15s ease;
 }
-
-/* En el landing el corazón va flotando sobre la imagen; acá va en la fila */
-.detail-eyebrow-row .btn-favorito {
-  position: static;
-  flex-shrink: 0;
-  border: 1px solid var(--line, #e7e0d6);
-}
+.detail-fav:hover { color: var(--rust, #a8432f); border-color: var(--rust, #a8432f); }
+.detail-fav.active i { font-weight: 900; color: var(--rust, #a8432f); }

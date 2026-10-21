@@ -8,14 +8,12 @@ $tpl = loadTPL("recuperarContra", "Recuperar contraseña");
 $msg_error = "";
 $msg_exito = "";
 
-// Link "usar otro correo"
 if (isset($_GET['volver'])) {
     unset($_SESSION['reset_pendiente']);
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // ---------- PASO 2: verificar código ----------
     if (isset($_POST['txt_codigo'])) {
         $email  = $_SESSION['reset_pendiente'] ?? '';
         $codigo = trim($_POST['txt_codigo'] ?? '');
@@ -46,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $msg_error = "Código incorrecto o vencido.";
     }
 
-    // ---------- PASO 1: pedir mail y enviar código ----------
     else {
         $email = trim($_POST["txt_email"] ?? "");
 
@@ -94,7 +91,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 
-// Mostrar el paso que corresponde
 $paso2 = isset($_SESSION['reset_pendiente']);
 $tpl = setVarTPL("display_email",  $paso2 ? "none"  : "block", $tpl);
 $tpl = setVarTPL("display_codigo", $paso2 ? "block" : "none",  $tpl);

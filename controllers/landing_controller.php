@@ -205,7 +205,6 @@ $eventos =
         $fechaHasta
     );
 
-//PARA FILTRAR RANKING
 
 $ranking = $_GET['ranking'] ?? '';
 

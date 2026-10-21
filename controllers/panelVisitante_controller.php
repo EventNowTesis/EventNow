@@ -161,7 +161,6 @@ $eventosFavoritos = filtrarFavoritosVisitante($todosLosFavoritos, [
 $totalFavoritos  = count($todosLosFavoritos);
 $totalFiltrados  = count($eventosFavoritos);
 
-// Sin favoritos: mensaje de siempre. Con favoritos pero sin coincidencias: estado vacío.
 if ($totalFavoritos === 0) {
     $htmlFavoritos = generarHtmlTarjetasEventos([], 'favoritos');
 } elseif ($totalFiltrados === 0) {

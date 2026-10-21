@@ -162,7 +162,6 @@ if (isset($_POST["btn_editar"])) {
     }
 
 
-    /* ---------- Imágenes: aplicar cambios en disco ---------- */
 
     $nuevaPortada = aplicarCambioImagenes(
         $rutaCarpetaEvento,
@@ -170,7 +169,6 @@ if (isset($_POST["btn_editar"])) {
         $cambioImagenes['nuevas']
     );
 
-    // si se borró la portada (o cambió el orden), actualizamos la que guarda el evento
     if ($nuevaPortada !== null) {
         $portadaCompleta = $carpetaEvento . '/' . $nuevaPortada;
 
@@ -220,14 +218,10 @@ if (substr($evento['fecha'], 0, 10) < date('Y-m-d') || ($evento['estado'] ?? '')
 $tpl = loadTPL("editar_evento", "Editar evento");
 
 
-/* ---------- Navbar (usuario + notificaciones) ---------- */
-
-// Setea USUARIO_NOMBRE, PERFIL_SLUG, ROL_CLASE, BADGE_* y LISTA_NOTIFICACIONES
 $tpl = cargarNavbarComun($tpl, $id_usuario, $rolUsuario);
 $tpl = setVarTPL("ESTADO_SESION", "logueado", $tpl);
 
 
-/* ---------- Datos del evento ---------- */
 
 $tpl = setVarTPL("ID_EVENTO", $evento["id_evento"] ?? "", $tpl);
 $tpl = setVarTPL("TITULO", htmlspecialchars($evento["titulo"] ?? ""), $tpl);
@@ -308,7 +302,6 @@ foreach ($categorias as $categoria) {
 }
 
 
-/* ---------- Imágenes actuales (con casilla para quitar) ---------- */
 
 $htmlImagenes = '';
 $carpetaEvento = carpetaDelEvento($evento);

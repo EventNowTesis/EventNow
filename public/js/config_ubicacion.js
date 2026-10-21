@@ -1,6 +1,4 @@
-// Lógica de la sección "Ubicación" dentro del modal de Configuración.
-// Reutiliza Nominatim (OpenStreetMap) para buscar direcciones, igual que mapa.js,
-// pero manejado de forma independiente para no interferir con el de publicar/editar evento.
+
 
 var mapaConfig = null;
 var marcadorConfig = null;
@@ -52,7 +50,7 @@ function iniciarOActualizarMapaConfig() {
                 .bindPopup('<b>Tu ubicación actual</b>');
         }
 
-        // Permitir marcar la ubicación tocando directamente el mapa
+        //permite marcar la ubicación tocando directamente el mapa
         mapaConfig.on('click', function (evento) {
             establecerUbicacionConfig(
                 evento.latlng.lat,
@@ -89,7 +87,7 @@ function establecerUbicacionConfig(lat, lon, nombre) {
         .bindPopup('<b>Ubicación seleccionada</b>' + (nombre ? '<br>' + nombre : ''))
         .openPopup();
 
-    // Si el usuario mueve el marcador, se considera "sin guardar" hasta que apriete Guardar
+    //zi el usuario mueve el marcador, se considera "sin guardar" hasta que apriete Guardar
     estadoGuardarConfig.textContent = '';
     estadoGuardarConfig.className = '';
 }

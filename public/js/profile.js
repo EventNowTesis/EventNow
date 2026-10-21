@@ -1,6 +1,4 @@
-// =========================================================
-// PERFIL: ordenar las tarjetas de eventos por fecha
-// =========================================================
+
 
 document.addEventListener('DOMContentLoaded', function () {
 

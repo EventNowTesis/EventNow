@@ -6,9 +6,6 @@ const formEvento = document.getElementById('form-evento');
 const dropzone = document.getElementById('dropzone');
 const contadorImagenes = document.getElementById('contador-imagenes');
 
-/* ---------------------------------------------------------
-   Fecha / hora mínimas (sin cambios)
---------------------------------------------------------- */
 if (inputFecha) {
     const hoy = new Date();
     const yyyy = hoy.getFullYear();
@@ -47,9 +44,6 @@ if (inputFecha) {
     }
 }
 
-/* ---------------------------------------------------------
-   Vista previa en vivo (tarjeta de la derecha)
---------------------------------------------------------- */
 const campoTitulo = document.getElementById('titulo');
 const campoDescripcion = document.getElementById('descripcion');
 const campoHora = document.getElementById('hora');
@@ -94,21 +88,14 @@ function actualizarPreview() {
 });
 
 
-// "localidad" la completa localidad.js por código (sin disparar eventos),
-// así que la revisamos cada tanto para que la vista previa no quede desfasada.
 setInterval(actualizarPreview, 600);
 
-/* ---------------------------------------------------------
-   Imágenes + carrusel de la vista previa
---------------------------------------------------------- */
 const MIN_IMAGENES = 2;
 const MAX_IMAGENES = 6;
 
-let imagenes = [];      // acá guardamos los archivos elegidos
-let indiceActual = 0;   // imagen que se está viendo en el carrusel
+let imagenes = [];      
+let indiceActual = 0;   
 
-// el input file no deja borrar un archivo suelto,
-// así que lo reconstruimos con los archivos que quedan
 function sincronizarInput() {
     const dt = new DataTransfer();
     imagenes.forEach(function (archivo) {
@@ -138,7 +125,6 @@ function mostrarCarrusel() {
     img.src = URL.createObjectURL(imagenes[indiceActual]);
     carrusel.appendChild(img);
 
-    // botón borrar
     const btnBorrar = document.createElement('button');
     btnBorrar.type = 'button';
     btnBorrar.className = 'carrusel-borrar';
@@ -150,7 +136,6 @@ function mostrarCarrusel() {
     });
     carrusel.appendChild(btnBorrar);
 
-    // flechas (solo si hay más de una)
     if (imagenes.length > 1) {
         const btnPrev = document.createElement('button');
         btnPrev.type = 'button';
@@ -176,7 +161,6 @@ function mostrarCarrusel() {
         carrusel.appendChild(btnNext);
     }
 
-    // contador
     const contador = document.createElement('div');
     contador.className = 'carrusel-contador';
     contador.textContent = (indiceActual + 1) + ' / ' + imagenes.length;
@@ -193,7 +177,6 @@ function mostrarCarrusel() {
     previewBox.appendChild(carrusel);
 }
 
-// agrega archivos (desde el selector o arrastrados) con las mismas validaciones
 function agregarArchivos(lista) {
     lista.forEach(function (archivo) {
         if (!archivo.type.startsWith('image/')) {
@@ -213,7 +196,7 @@ function agregarArchivos(lista) {
         }
     });
 
-    indiceActual = imagenes.length - 1; // mostramos la última agregada
+    indiceActual = imagenes.length - 1; 
     sincronizarInput();
     mostrarCarrusel();
 }
@@ -257,9 +240,6 @@ if (formEvento) {
     });
 }
 
-/* ---------------------------------------------------------
-   Ubicación (sin cambios)
---------------------------------------------------------- */
 function ajustarAlturaUbicacion() {
     inputUbicacion.style.height = 'auto';
     inputUbicacion.style.height = inputUbicacion.scrollHeight + 'px';
@@ -323,9 +303,6 @@ if (btnGeo) {
     });
 }
 
-/* ---------------------------------------------------------
-   Filas dinámicas: line-up e info extra (sin cambios)
---------------------------------------------------------- */
 function agregarFila(idLista, idTemplate) {
     const lista = document.getElementById(idLista);
     const tpl = document.getElementById(idTemplate);

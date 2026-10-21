@@ -4,8 +4,7 @@ let temporizadorLocalidad = null;
 const inputLocalidad = document.getElementById('localidad');
 
 if (inputLocalidad) {
-  // Si ya viene con un valor guardado (formulario de editar), no lo pisamos
-  // hasta que el anfitrión mueva el marcador.
+  //si ya viene con un valor guardado no se toca
   inputLocalidad.addEventListener('input', () => { localidadEditadaAMano = true; });
 }
 
@@ -28,8 +27,7 @@ async function localidadDesdeCoordenadas(lat, lon) {
   let candidata = a.town || a.village || a.city || a.city_district
       || a.municipality || a.suburb || a.neighbourhood || a.county || '';
 
-  // Si el candidato es un nombre "basura" (urbanización, no localidad real),
-  // buscamos una localidad conocida dentro del display_name completo
+  //buscamos una localidad conocida dentro del display_name completo
   if (!candidata || NOMBRES_INVALIDOS.test(candidata)) {
     const encontrada = LOCALIDADES_CONOCIDAS.find(loc =>
       data.display_name && data.display_name.includes(loc)

@@ -5,9 +5,6 @@ require_once __DIR__ . "/DBAbstract.php";
 require_once __DIR__ . '/Landing.php';
 
 if (!function_exists('e')) {
-    /**
-     * Escapa un valor para salida segura en HTML.
-     */
     function e($valor)
     {
         return htmlspecialchars($valor ?? '', ENT_QUOTES, 'UTF-8');
@@ -33,7 +30,6 @@ function listarImagenesEvento($rutaCarpeta)
  
  
 // valida lo que mandó el formulario (imágenes a quitar + nuevas) SIN tocar el disco
-// devuelve ['error' => string|null, 'eliminar' => [...nombres], 'nuevas' => [...['tmp_name','ext']]]
 function validarCambioImagenes($rutaCarpeta, $postEliminar, $filesImagenes)
 {
     $MIN_IMAGENES = 2;
@@ -43,7 +39,7 @@ function validarCambioImagenes($rutaCarpeta, $postEliminar, $filesImagenes)
  
     $existentes = listarImagenesEvento($rutaCarpeta);
  
-    // solo aceptamos nombres que realmente existen en la carpeta del evento
+    //solo aceptamos nombres que realmente existen en la carpeta del evento
     $eliminar = [];
     foreach ((array) $postEliminar as $nombre) {
         $nombre = basename((string) $nombre);
@@ -103,10 +99,6 @@ function aplicarCambioImagenes($rutaCarpeta, $eliminar, $nuevas)
     return $restantes[0] ?? null;
 }
  
- 
-// guarda la nueva portada del evento ("evt_xxxx/archivo.jpg")
-// COMPLETAR con tu estilo de conexión (mysqli / PDO): UPDATE de la misma columna que usa crearPost
-// para $datos['nombreArchivo'], WHERE id_evento = $id_evento. Devolver true/false.
 function actualizarPortadaEvento($id_evento, $nuevaPortada)
 {
     $db = dbConnect();
@@ -123,8 +115,6 @@ function actualizarPortadaEvento($id_evento, $nuevaPortada)
     return $ok;
 }
 /**
- * Crea un evento junto con sus datos opcionales (contacto, información útil,
- * "a tener en cuenta", horario e información extra).
  *
  * @param int   $id_usuario
  * @param array $datos      Campos simples del evento (ver claves esperadas abajo)

@@ -8,11 +8,6 @@ require_once __DIR__ . "/assets/tpl_engine/tpl_engine.php";
 
 date_default_timezone_set('America/Argentina/Buenos_Aires');
 
-/* =========================================================
-   HELPERS: "Anterior ..." en rojo al lado de cada cambio
-   ========================================================= */
-
-// <span> con el valor anterior. $enBloque = true lo baja debajo del valor nuevo (título, descripción)
 function renderAnteriorHtml($valorAnterior, $enBloque = false)
 {
     $valorAnterior = trim((string) $valorAnterior);
@@ -22,7 +17,6 @@ function renderAnteriorHtml($valorAnterior, $enBloque = false)
     return "<span class='{$clase}'><span class='tag-anterior'>Anterior</span><span>{$texto}</span></span>";
 }
 
-// "Anterior 15/10/2026 · 03:00 hs": fecha y hora juntas, solo si cambió alguna de las dos
 function renderFechaHoraAnteriorLinea($evento, $cambios)
 {
     if (!isset($cambios['fecha']) && !isset($cambios['hora'])) {
@@ -73,7 +67,6 @@ if (!$evento) {
 
 $datos = prepararDatosEventoDetalle($evento);
 
-// ¿El evento ya pasó? (se usa para habilitar las valoraciones)
 $yaPaso = eventoYaPaso($evento);
 $esRevisionAdmin = ($rolUsuario === 'admin')
     && in_array($evento['estado'] ?? '', ['pendiente', 'modificado'], true);
@@ -312,17 +305,8 @@ foreach ([
     }
 }
 
-// Sección completa: resumen + formulario (solo si el evento ya pasó) + lista
 $htmlValoraciones = generarHtmlSeccionValoraciones($id_evento, $id_usuario, $yaPaso, $mensajesHtml);
 
-/* =========================================================
-   EVENTO PASADO: asistencia y contacto
-   ========================================================= */
-
-/* =========================================================
-   HERO NUEVO: etiqueta superior, subtítulo y etiquetas
-   (se definen ANTES de $reemplazos)
-   ========================================================= */
 
 $diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
 $tsEvento = strtotime($evento['fecha'] ?? '');
@@ -335,7 +319,6 @@ if ($yaPaso) {
     $eyebrow = 'Un plan para vos';
 }
 
-// Ajustá 'subtitulo' y 'etiquetas' si en tu base de datos se llaman distinto
 $subtitulo = (string) ($evento['subtitulo'] ?? '');
 
 $etiquetasHtml = '';
@@ -344,8 +327,6 @@ foreach ($listaEtiquetas as $tag) {
     $etiquetasHtml .= '<span class="detail-tag">' . e($tag) . '</span>';
 }
 
-
-/* ---------- Botón de confirmar asistencia ---------- */
 
 if ($yaPaso) {
 
@@ -358,7 +339,6 @@ if ($yaPaso) {
 
 } else {
 
-    // ¿Esta persona ya confirmó asistencia? (para mostrar el estado guardado al cargar)
     $yaConfirmo = in_array(
         (int) $evento['id_evento'],
         obtenerIdsAsistenciasUsuario($id_usuario),
@@ -403,11 +383,6 @@ if ($yaPaso) {
 }
 
 
-/* =========================================================
-   CAMBIOS: cada uno se muestra "Anterior ..." junto a su dato
-   ========================================================= */
-
-// Título y descripción: el anterior va debajo del valor nuevo
 $tituloAnteriorHtml = isset($cambiosVisibles['titulo'])
     ? renderAnteriorHtml($cambiosVisibles['titulo']['antes'], true)
     : '';
@@ -416,8 +391,6 @@ $descripcionAnteriorHtml = isset($cambiosVisibles['descripcion'])
     ? renderAnteriorHtml($cambiosVisibles['descripcion']['antes'], true)
     : '';
 
-// Lo que no tiene un lugar propio en la pantalla (categoría, línea de artistas, etc.)
-// Zona/ubicación la resuelve renderUbicacionDetalleHtml.
 $camposConLugarPropio = ['titulo', 'descripcion', 'fecha', 'hora', 'zona'];
 $cambiosRestantes = array_diff_key($cambiosVisibles, array_flip($camposConLugarPropio));
 

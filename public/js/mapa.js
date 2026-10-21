@@ -70,7 +70,7 @@ function ocultarSugerencias() {
     listaSugerencias.innerHTML = '';
 }
 
-// La usan seleccionarLugar() y el botón "Usar mi ubicación actual" (posts.js)
+//la usan seleccionarLugar() y el botón "Usar mi ubicación actual" (posts.js)
 function centrarMapaEnUbicacion(lat, lon, textoPopup) {
     map.setView([lat, lon], 16);
 
@@ -83,7 +83,7 @@ function centrarMapaEnUbicacion(lat, lon, textoPopup) {
         .openPopup();
 }
 
-// La usa el botón "Usar mi ubicación actual" en posts.js
+//la usa el botón "Usar mi ubicación actual" en posts.js
 function obtenerDireccionDesdeCoordenadas(lat, lon, callback) {
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
 
@@ -141,7 +141,7 @@ function buscarDireccion() {
         });
 }
 
-// Modo edición: si el evento ya tiene coordenadas guardadas, centramos el mapa al cargar
+//si el evento ya tiene coordenadas guardadas, centramos el mapa al cargar
 if (inputLat.value && inputLon.value) {
     const latInicial = parseFloat(inputLat.value);
     const lonInicial = parseFloat(inputLon.value);

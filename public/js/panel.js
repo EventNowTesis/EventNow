@@ -46,7 +46,6 @@ function toggleMobileMenu(btn) {
     btn.setAttribute('aria-expanded', isOpen);
 }
 
-// Cierra el menú mobile si se hace click afuera del navbar
 document.addEventListener('click', function (e) {
     const navbar = document.querySelector('.navbar.mobile-open');
     if (navbar && !navbar.contains(e.target)) {

@@ -37,7 +37,6 @@ function mostrarMesSeleccionado() {
     var meses = document.getElementsByClassName("mes-calendario");
     var i;
 
-    // Ocultamos todos los meses.
     for (i = 0; i < meses.length; i++) {
         meses[i].style.display = "none";
     }
@@ -66,13 +65,11 @@ function cambiarMes(cantidad) {
 
     mesCalendario = mesCalendario + cantidad;
 
-    // Pasamos de diciembre a enero del año siguiente...
     if (mesCalendario > 11) {
         mesCalendario = 0;
         anioCalendario = anioCalendario + 1;
     }
 
-    // ...o de enero a diciembre del año anterior.
     if (mesCalendario < 0) {
         mesCalendario = 11;
         anioCalendario = anioCalendario - 1;
@@ -248,12 +245,6 @@ function quitarFavoritoPanel(btn, idEvento) {
 }
 
 
-/* =========================================================
-   FAVORITOS: contadores y estado vacío
-   El filtrado lo hace el servidor (ver controlador + filtros.js).
-   Esto solo mantiene al día la pantalla cuando se quita un favorito
-   o se cancela una asistencia sin recargar.
-   ========================================================= */
 
 function actualizarFavoritos(favoritoQuitado) {
 
