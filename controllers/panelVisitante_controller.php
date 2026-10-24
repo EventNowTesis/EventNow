@@ -7,19 +7,12 @@ require_once __DIR__ . '/../models/Notificaciones.php';
 require_once __DIR__ . "/assets/tpl_engine/tpl_engine.php";
 
 
-/* =========================================================
-   COMPROBAR SESIÓN
-   ========================================================= */
-
 if (!isset($_SESSION["id_usuario"])) {
     header("Location: index.php?slug=login");
     exit;
 }
 
 
-/* =========================================================
-   COMPROBAR ROL
-   ========================================================= */
 
 if ($_SESSION["rol"] !== "visitante") {
     echo "No tenés permiso para acceder a este panel.";
@@ -27,9 +20,6 @@ if ($_SESSION["rol"] !== "visitante") {
 }
 
 
-/* =========================================================
-   OBTENER USUARIO
-   ========================================================= */
 
 $id_usuario = $_SESSION["id_usuario"];
 $rolUsuario = $_SESSION["rol"];
@@ -42,9 +32,6 @@ if (!$usuario) {
 }
 
 
-/* =========================================================
-   UBICACIÓN
-   ========================================================= */
 
 $msgUbicacion = "";
 
@@ -79,9 +66,6 @@ if (
 $ubicacion = getUbicacionUsuario($id_usuario);
 
 
-/* =========================================================
-   FILTROS DE FAVORITOS (mismos que el landing)
-   ========================================================= */
 
 function leerParamGet($nombre)
 {
@@ -142,9 +126,7 @@ if ($fechaDesde !== '' && $fechaHasta !== '' && $fechaHasta < $fechaDesde) {
 }
 
 
-/* =========================================================
-   FAVORITOS
-   ========================================================= */
+
 
 $todosLosFavoritos = getFavoritosVisitante($id_usuario);
 
@@ -179,9 +161,7 @@ $opcionesCategoria = ['' => 'Todas las categorías'] + $categoriasPermitidas;
 $opcionesZona = ['' => 'Todas las zonas'] + obtenerZonasFavoritos($todosLosFavoritos);
 
 
-/* =========================================================
-   ASISTENCIAS
-   ========================================================= */
+
 
 $eventosAsistire = getAsistireVisitante($id_usuario);
 
@@ -189,9 +169,7 @@ $htmlAsistire = generarHtmlTarjetasEventos($eventosAsistire, 'asistire');
 $htmlCalendario = generarCalendarioAnual($eventosAsistire);
 
 
-/* =========================================================
-   TEMPLATE
-   ========================================================= */
+
 
 $tpl = loadTPL("panelVisitante", "Panel Visitante");
 
@@ -223,9 +201,7 @@ $tpl = setVarTPL("CANTIDAD_FAVORITOS", $totalFavoritos, $tpl);
 $tpl = setVarTPL("SIN_RESULTADOS_HIDDEN", $sinResultadosHidden, $tpl);
 
 
-/* =========================================================
-   SELECTOR DE AÑOS
-   ========================================================= */
+
 
 $añoActual = (int) date('Y');
 $añoInicial = $añoActual - 10;

@@ -351,4 +351,79 @@ function purgarCuentasVencidas()
         WHERE estado = 'desactivado' AND fecha_baja IS NOT NULL
         AND fecha_baja < DATE_SUB(NOW(), INTERVAL 15 DAY)");
 }
+
+
+
+function cambiarRolUsuario($id_usuario, $nuevo_rol)
+{
+    if (!in_array($nuevo_rol, ['anfitrion', 'visitante'], true)) {
+        return false;
+    }
+
+    $db = dbConnect();
+
+    $sql = "SELECT rol, estado
+            FROM users
+            WHERE id_usuario = ?
+            LIMIT 1";
+
+    $stmt = mysqli_prepare($db, $sql);
+
+    if (!$stmt) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_usuario);
+    mysqli_stmt_execute($stmt);
+
+    $resultado = mysqli_stmt_get_result($stmt);
+    $usuario = mysqli_fetch_assoc($resultado);
+
+    mysqli_stmt_close($stmt);
+
+    if (!$usuario || $usuario['estado'] !== 'activo') {
+        return false;
+    }
+
+   //lo puse para que no se pueda modificar el rol del admin
+    if (!in_array($usuario['rol'], ['anfitrion', 'visitante'], true)) {
+        return false;
+    }
+
+    
+    if ($usuario['rol'] === $nuevo_rol) {
+        return false;
+    }
+
+    $sql = "UPDATE users
+            SET rol = ?
+            WHERE id_usuario = ?
+            AND rol = ?
+            AND estado = 'activo'";
+
+    $stmt = mysqli_prepare($db, $sql);
+
+    if (!$stmt) {
+        return false;
+    }
+
+    mysqli_stmt_bind_param(
+        $stmt,
+        "sis",
+        $nuevo_rol,
+        $id_usuario,
+        $usuario['rol']
+    );
+
+    $ok = mysqli_stmt_execute($stmt);
+
+    if ($ok && mysqli_stmt_affected_rows($stmt) !== 1) {
+        $ok = false;
+    }
+
+    mysqli_stmt_close($stmt);
+
+    return $ok;
+}
+
 ?>

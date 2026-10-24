@@ -56,6 +56,9 @@
                         </ul>
                     </div>
                 </div>
+                <a href="index.php?slug=misSeguidores">
+                        Mis seguidores
+                </a>
 
                 <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
                     <div class="user-profile">
@@ -87,7 +90,18 @@
                             <i class="fa-solid fa-trash-can"></i>
                             Eliminar mi cuenta
                         </button>
+
+                        <form action="index.php?slug=cambiarRol" method="POST">
+
+                        <button type="submit" class="dropdown-user-item">
+                            <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo cliente
+                        </button>
+
+                    </form>
+
                     </div>
+
                 </div>
             </div>
 
