@@ -1,12 +1,6 @@
 <?php
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
-/**
- * Devuelve siempre la MISMA conexión durante todo el request (patrón singleton).
- * La primera llamada abre la conexión; las siguientes reusan la que ya está abierta.
- * No hace falta (ni conviene) cerrarla a mano en cada función de los modelos:
- * PHP la cierra sola al terminar el script.
- */
 function dbConnect(){
     static $db = null;
 
@@ -28,11 +22,7 @@ function dbConnect(){
     return $db;
 }
 
-/**
- * Helper para queries simples sin parámetros. OJO: no usar con datos
- * que vengan del usuario (GET/POST) sin sanitizar antes -- para eso
- * usar siempre mysqli_prepare + bind_param, como en el resto del código.
- */
+
 function dbQuery($query){
     $db = dbConnect();
 

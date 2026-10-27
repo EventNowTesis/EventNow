@@ -18,6 +18,90 @@ const inputUbicacion = document.getElementById('ubicacion');
 const inputLocalidad = document.getElementById('localidad');
 const estadoUbicacion = document.getElementById('estado-ubicacion');
 
+function ceroIzq(n) {
+    return String(n).padStart(2, '0');
+}
+
+function fechaHoyStr() {
+    const a = new Date();
+    return a.getFullYear() + '-' + ceroIzq(a.getMonth() + 1) + '-' + ceroIzq(a.getDate());
+}
+
+function horaActualStr() {
+    const a = new Date();
+    return ceroIzq(a.getHours()) + ':' + ceroIzq(a.getMinutes());
+}
+
+function actualizarMinFechaHora() {
+    const hoyStr = fechaHoyStr();
+    const horaMin = horaActualStr();
+
+    inputFecha.min = hoyStr;
+    inputFecha.setCustomValidity('');
+    campoHora.setCustomValidity('');
+
+    if (inputFecha.value === hoyStr) {
+        campoHora.min = horaMin;
+        if (campoHora.value && campoHora.value < horaMin) {
+            campoHora.setCustomValidity('El valor debe ser igual o posterior a ' + horaMin + '.');
+        }
+    } else {
+        campoHora.removeAttribute('min');
+    }
+
+    if (inputFecha.value && inputFecha.value < hoyStr) {
+        inputFecha.setCustomValidity('El valor debe ser igual o posterior a ' + hoyStr + '.');
+    }
+}
+
+[inputFecha, campoHora].forEach(function (el) {
+    el.addEventListener('input', actualizarMinFechaHora);
+    el.addEventListener('change', actualizarMinFechaHora);
+});
+
+const btnGuardar = document.querySelector('.btn-submit');
+if (btnGuardar) btnGuardar.addEventListener('click', actualizarMinFechaHora);
+
+actualizarMinFechaHora();
+
+const listaHorarios = document.getElementById('lista-horarios');
+
+function validarLineup() {
+    const filas = listaHorarios.querySelectorAll('.fila-dinamica');
+    let anterior = null;
+
+    filas.forEach(function (fila) {
+        const inputHora = fila.querySelector('input[type="time"]');
+        const inputActividad = fila.querySelector('input[type="text"]');
+        if (!inputHora) return;
+
+        inputHora.setCustomValidity('');
+
+        if (!inputActividad || inputActividad.value.trim() === '' || inputHora.value === '') return;
+
+        const partes = inputHora.value.split(':');
+        const minutos = Number(partes[0]) * 60 + Number(partes[1]);
+
+        if (campoHora && campoHora.value && inputHora.value < campoHora.value) {
+            inputHora.setCustomValidity('No puede ser antes de las ' + campoHora.value + ', cuando empieza el evento.');
+        } else if (anterior !== null && minutos < anterior.minutos + 30) {
+            inputHora.setCustomValidity('Tiene que ser al menos 30 minutos después de las ' + anterior.texto + '.');
+        }
+
+        anterior = { minutos: minutos, texto: inputHora.value };
+    });
+}
+
+listaHorarios.addEventListener('input', validarLineup);
+listaHorarios.addEventListener('change', validarLineup);
+
+if (btnGuardar) btnGuardar.addEventListener('click', validarLineup);
+
+['input', 'change'].forEach(function (n) {
+    campoHora.addEventListener(n, validarLineup);
+});
+
+validarLineup();
 
 function formatearFecha(valor) {
     if (!valor) return 'Fecha';
@@ -40,11 +124,9 @@ function actualizarPreview() {
     el.addEventListener('input', actualizarPreview);
     el.addEventListener('change', actualizarPreview);
 });
-actualizarPreview(); // arranca con los datos ya cargados del evento
+actualizarPreview();
 
-
-
-let imagenes = [];    
+let imagenes = [];
 let indiceActual = 0;
 
 function actualesVigentes() {
@@ -164,7 +246,7 @@ function agregarArchivos(lista) {
         if (!repetida) imagenes.push(archivo);
     });
 
-    indiceActual = 0; // las nuevas van primero en el carrusel
+    indiceActual = 0;
     sincronizarInput();
     mostrarCarrusel();
 }
@@ -204,13 +286,10 @@ formEvento.addEventListener('submit', function (e) {
 
 mostrarCarrusel();
 
-
-
 const lat0 = parseFloat(inputLat.value);
 const lon0 = parseFloat(inputLon.value);
 const tieneCoords = !isNaN(lat0) && !isNaN(lon0);
 
-// si el evento no tiene coordenadas, arranca en Posadas
 const mapa = L.map('mi_mapa').setView(
     tieneCoords ? [lat0, lon0] : [-27.3671, -55.8961],
     tieneCoords ? 16 : 13
@@ -315,8 +394,6 @@ document.getElementById('btn_ubi').addEventListener('click', function () {
     );
 });
 
-
-
 const ICONO_QUITAR = '<i class="fa-solid fa-xmark"></i>';
 
 function agregarHorario() {
@@ -341,4 +418,5 @@ function agregarInfoExtra() {
 
 function quitarFila(boton) {
     boton.closest('.fila-dinamica').remove();
+    validarLineup();
 }

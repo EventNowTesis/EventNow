@@ -8,7 +8,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/css/navbar.css">
     <link rel="stylesheet" href="public/css/filtros.css">
@@ -30,7 +32,8 @@
                 </div>
             </a>
 
-            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false" onclick="toggleMobileMenu(this)">
+            <button class="hamburger-btn" id="hamburger-btn" aria-label="Abrir menú" aria-expanded="false"
+                onclick="toggleMobileMenu(this)">
                 <i class="fa-solid fa-bars icon-open"></i>
                 <i class="fa-solid fa-xmark icon-close"></i>
             </button>
@@ -56,9 +59,7 @@
                         </ul>
                     </div>
                 </div>
-                <a href="index.php?slug=misSeguidores">
-                        Mis seguidores
-                </a>
+
 
                 <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
                     <div class="user-profile">
@@ -78,27 +79,41 @@
                             <i class="fa-solid fa-comments"></i>
                             Mensajes
                         </a>
-                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                        <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-user-check"></i>
+                            Siguiendo
+                        </a>
+                        <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+                            <i class="fa-solid fa-user-group"></i>
+                            Mis seguidores
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
                             <i class="fa-solid fa-gear"></i>
                             Configuración
                         </a>
-                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout" onclick="return confirm('¿Seguro que querés cerrar sesión?');">
+                        <a href="index.php?slug=logout" class="dropdown-user-item dropdown-user-logout"
+                            onclick="return confirm('¿Seguro que querés cerrar sesión?');">
                             <i class="fa-solid fa-right-from-bracket"></i>
                             Cerrar sesión
                         </a>
-                        <button type="button" class="dropdown-user-item dropdown-user-eliminar" onclick="event.stopPropagation(); abrirModalEliminar();">
+                        <button type="button" class="dropdown-user-item dropdown-user-eliminar"
+                            onclick="event.stopPropagation(); abrirModalEliminar();">
                             <i class="fa-solid fa-trash-can"></i>
                             Eliminar mi cuenta
                         </button>
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo anfitrión
+                            </button>
+                        </form>
 
-                        <form action="index.php?slug=cambiarRol" method="POST">
-
-                        <button type="submit" class="dropdown-user-item">
-                            <i class="fa-solid fa-repeat"></i>
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
                                 Cambiar a modo cliente
-                        </button>
-
-                    </form>
+                            </button>
+                        </form>
 
                     </div>
 
@@ -111,8 +126,10 @@
     <div class="modal-eliminar" id="modal-eliminar" hidden>
         <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
             <h3>Eliminar mi cuenta</h3>
-            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.</p>
-            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password" required>
+            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+            </p>
+            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+                required>
             <div class="modal-eliminar-acciones">
                 <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
                 <button type="submit" class="btn-peligro">Eliminar cuenta</button>
@@ -156,14 +173,14 @@
             </div>
         </div>
 
-        <!-- BUSCADOR + FILTROS (filtros.css). data-ajax-destino = zona que se actualiza al filtrar -->
         <form id="form-filtros" class="filters-box" method="GET" action="index.php" data-ajax-destino="#resultados">
 
             <input type="hidden" name="slug" value="panel">
 
             <div class="search-container">
                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="text" name="q" class="search-input" value="{FILTRO_Q}" placeholder="Buscar en mis eventos..." autocomplete="off" aria-label="Buscar en mis eventos">
+                <input type="text" name="q" class="search-input" value="{FILTRO_Q}"
+                    placeholder="Buscar en mis eventos..." autocomplete="off" aria-label="Buscar en mis eventos">
             </div>
 
             <div class="filters-grid">
@@ -187,11 +204,13 @@
                 </div>
 
                 <div class="filter">
-                    <input type="date" name="desde" id="fecha-desde" class="filter-control" value="{FILTRO_DESDE}" aria-label="Fecha desde" title="Desde">
+                    <input type="date" name="desde" id="fecha-desde" class="filter-control" value="{FILTRO_DESDE}"
+                        aria-label="Fecha desde" title="Desde">
                 </div>
 
                 <div class="filter">
-                    <input type="date" name="hasta" id="fecha-hasta" class="filter-control" value="{FILTRO_HASTA}" aria-label="Fecha hasta" title="Hasta">
+                    <input type="date" name="hasta" id="fecha-hasta" class="filter-control" value="{FILTRO_HASTA}"
+                        aria-label="Fecha hasta" title="Hasta">
                 </div>
 
             </div>
@@ -213,7 +232,7 @@
 
     <script src="public/js/navbar.js"></script>
     <script src="public/js/filtros.js"></script>
-    <script src="public/js/panelAnfitrion.js"></script>
+    <script src="public/js/panel.js"></script>
     <script src="https://cdn.botpress.cloud/webchat/v3.7/inject.js"></script>
     <script src="https://files.bpcontent.cloud/2026/09/30/15/20260930150826-WTG82BAO.js" defer></script>
 </body>

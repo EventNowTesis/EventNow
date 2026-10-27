@@ -77,7 +77,15 @@
               <i class="fa-solid fa-comments"></i>
               Mensajes
             </a>
-            <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+            <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+              <i class="fa-solid fa-user-check"></i>
+              Siguiendo
+            </a>
+            <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+              <i class="fa-solid fa-user-group"></i>
+              Mis seguidores
+            </a>
+            <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
               <i class="fa-solid fa-gear"></i>
               Configuración
             </a>
@@ -91,6 +99,19 @@
               <i class="fa-solid fa-trash-can"></i>
               Eliminar mi cuenta
             </button>
+            <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+              <button type="submit" class="dropdown-user-item">
+                <i class="fa-solid fa-repeat"></i>
+                Cambiar a modo anfitrión
+              </button>
+            </form>
+
+            <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+              <button type="submit" class="dropdown-user-item">
+                <i class="fa-solid fa-repeat"></i>
+                Cambiar a modo cliente
+              </button>
+            </form>
           </div>
         </div>
 
@@ -99,18 +120,18 @@
     </div>
   </nav>
   <div class="modal-eliminar" id="modal-eliminar" hidden>
-        <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
-            <h3>Eliminar mi cuenta</h3>
-            <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
-            </p>
-            <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
-                required>
-            <div class="modal-eliminar-acciones">
-                <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
-                <button type="submit" class="btn-peligro">Eliminar cuenta</button>
-            </div>
-        </form>
-    </div>
+    <form class="modal-eliminar-box" action="index.php?slug=eliminarCuenta" method="POST">
+      <h3>Eliminar mi cuenta</h3>
+      <p>Tu cuenta se desactiva ahora y tenés 15 días para recuperarla. Pasado ese plazo se elimina para siempre.
+      </p>
+      <input type="password" name="txt_pass" placeholder="Confirmá tu contraseña" autocomplete="current-password"
+        required>
+      <div class="modal-eliminar-acciones">
+        <button type="button" onclick="cerrarModalEliminar()">Cancelar</button>
+        <button type="submit" class="btn-peligro">Eliminar cuenta</button>
+      </div>
+    </form>
+  </div>
   <div class="msg-page">
     <div class="msg-wrap">
 

@@ -7,7 +7,9 @@
     <title>Perfil de organizador | EventNow</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="public/css/filtros.css">
     <link rel="stylesheet" href="public/css/profile.css">
@@ -72,7 +74,15 @@
                             <i class="fa-solid fa-comments"></i>
                             Mensajes
                         </a>
-                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                        <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-user-check"></i>
+                            Siguiendo
+                        </a>
+                        <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+                            <i class="fa-solid fa-user-group"></i>
+                            Mis seguidores
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
                             <i class="fa-solid fa-gear"></i>
                             Configuración
                         </a>
@@ -86,6 +96,19 @@
                             <i class="fa-solid fa-trash-can"></i>
                             Eliminar mi cuenta
                         </button>
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo anfitrión
+                            </button>
+                        </form>
+
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo cliente
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -111,7 +134,6 @@
 
         <div class="perfil-topbar">
             <span class="perfil-eyebrow">Conocé al anfitrión</span>
-            <span class="perfil-topbar-right">La ciudad nos encuentra.</span>
         </div>
 
         <section class="perfil-hero">
@@ -129,6 +151,11 @@
                     <i class="fa-regular fa-envelope" aria-hidden="true"></i>
                     {USUARIO_EMAIL}
                 </p>
+            </div>
+
+            <div class="perfil-hero-acciones">
+                <span class="contador-seguidores">{SEGUIDORES_TXT}</span>
+                {BOTON_SEGUIR}
             </div>
 
             <div class="perfil-rating">

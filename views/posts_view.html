@@ -75,7 +75,15 @@
                             <i class="fa-solid fa-comments"></i>
                             Mensajes
                         </a>
-                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                        <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-user-check"></i>
+                            Siguiendo
+                        </a>
+                        <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+                            <i class="fa-solid fa-user-group"></i>
+                            Mis seguidores
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
                             <i class="fa-solid fa-gear"></i>
                             Configuración
                         </a>
@@ -89,6 +97,19 @@
                             <i class="fa-solid fa-trash-can"></i>
                             Eliminar mi cuenta
                         </button>
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo anfitrión
+                            </button>
+                        </form>
+
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo cliente
+                            </button>
+                        </form>
                     </div>
                 </div>
 
@@ -121,12 +142,9 @@
             </header>
 
             <div class="pub-grid">
-
-                <!-- ============ FORMULARIO ============ -->
                 <div class="pub-main">
                     <form action="index.php?slug=posts" method="POST" enctype="multipart/form-data" id="form-evento">
 
-                        <!-- 01 · Lo esencial -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">01</span>
@@ -172,7 +190,6 @@
                                 </div>
                             </div>
 
-                            <!-- NUEVO (del diseño): el back tiene que leer "entrada" y "precio" -->
                             <div class="grid-2col">
                                 <div class="grupo-campo" id="campo-precio" hidden>
                                     <label for="precio">Precio (ARS)</label>
@@ -182,7 +199,6 @@
                             </div>
                         </section>
 
-                        <!-- 02 · Ubicación -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">02</span>
@@ -222,7 +238,6 @@
                             </div>
                         </section>
 
-                        <!-- 03 · Imágenes -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">03</span>
@@ -240,7 +255,6 @@
                             </label>
                         </section>
 
-                        <!-- 04 · Line-up -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">04</span>
@@ -264,7 +278,6 @@
                             </button>
                         </section>
 
-                        <!-- 05 · Información útil -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">05</span>
@@ -274,7 +287,7 @@
 
                             <div class="fila-info-fija">
                                 <div>
-                                    <label for="info_apto">Apto para</label>
+                                    <label for="info_apto">Apto para <span class="req">*</span></label>
                                     <select name="info_apto" id="info_apto">
                                         <option value="" selected>—</option>
                                         <option value="Todo público">Todo público</option>
@@ -283,20 +296,28 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="info_duracion">Duración aproximada</label>
-                                    <input type="text" name="info_duracion" id="info_duracion"
-                                        placeholder="Ej: ~5 horas">
+                                    <label for="info_duracion_h">Duración aproximada</label>
+                                    <div class="duracion-campos">
+                                        <input type="text" name="info_duracion_h" id="info_duracion_h" placeholder="Hs"
+                                            inputmode="numeric" maxlength="2" aria-label="Horas"
+                                            oninput="this.value = this.value.replace(/\D/g, '')">
+                                        <span> : </span>
+                                        <input type="text" name="info_duracion_m" id="info_duracion_m" placeholder="Min"
+                                            inputmode="numeric" maxlength="2" aria-label="Minutos"
+                                            oninput="this.value = this.value.replace(/\D/g, ''); if (this.value > 59) this.value = 59;">
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="fila-info-fija">
                                 <div>
-                                    <label for="info_capacidad">Capacidad</label>
-                                    <input type="text" name="info_capacidad" id="info_capacidad"
-                                        placeholder="Ej: 1.500 personas">
+                                    <label for="info_capacidad">Capacidad de personas</label>
+                                    <input type="text" name="info_capacidad" id="info_capacidad" placeholder="Ej: 1500"
+                                        inputmode="numeric" pattern="[0-9]*" maxlength="7"
+                                        oninput="this.value = this.value.replace(/\D/g, '')">
                                 </div>
                                 <div>
-                                    <label for="info_accesibilidad">Accesibilidad</label>
+                                    <label for="info_accesibilidad">Accesibilidad <span class="req">*</span></label>
                                     <select name="info_accesibilidad" id="info_accesibilidad">
                                         <option value="" selected>—</option>
                                         <option value="Acceso para sillas de ruedas">Acceso para sillas de ruedas
@@ -340,7 +361,6 @@
                             </div>
                         </section>
 
-                        <!-- 06 · Contacto -->
                         <section class="form-card">
                             <div class="card-head">
                                 <span class="card-num">06</span>
@@ -387,7 +407,6 @@
                         <i class="fa-solid fa-arrow-up"></i> Volver arriba</a>
                 </div>
 
-                <!-- ============ VISTA PREVIA ============ -->
                 <aside class="pub-aside">
                     <p class="aside-label">Vista previa</p>
 
@@ -458,6 +477,7 @@
     <script src="public/js/toast.js"></script>
     <script src="public/js/mapa.js"></script>
     <script src="public/js/posts.js"></script>
+    <script src="public/js/horarios.js"></script>
 </body>
 
 </html>

@@ -1,18 +1,11 @@
 <?php
 
-/*
-| Funciones NUEVAS solo para la página de perfil del anfitrión.
-| No reemplazan ninguna función existente.
-| Usa funciones que ya tenés: getEventosAprobados() y prepararDatosEventoDetalle() (Posts.php),
-| eventoYaPaso() (Landing.php) y fechaCortaEvento() (Panel.php).
-*/
+
 
 require_once __DIR__ . '/DBAbstract.php';
 
 
-/**
- * Promedio y cantidad de valoraciones de TODOS los eventos de un anfitrión.
- */
+
 function obtenerValoracionAnfitrion($idAnfitrion)
 {
     $db = dbConnect();
@@ -41,9 +34,7 @@ function obtenerValoracionAnfitrion($idAnfitrion)
 }
 
 
-/**
- * Eventos aprobados de un anfitrión, ordenados por fecha ascendente.
- */
+
 function getEventosDeAnfitrion($idAnfitrion)
 {
     $propios = array_filter(
@@ -64,9 +55,7 @@ function getEventosDeAnfitrion($idAnfitrion)
 }
 
 
-/**
- * Tarjetas de eventos del perfil.
- */
+
 function generarHtmlEventosPerfil($eventos)
 {
     if (empty($eventos)) {

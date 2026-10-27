@@ -1,12 +1,4 @@
-/* EventNow — versión renovada. Reemplazá el archivo completo.
-   Paleta original conservada; no requiere nuevas clases ni cambios en HTML. */
 
-/* =========================================================
-   EventNow — PANEL VISITANTE
-   El navbar vive en navbar.css; el buscador y los filtros,
-   en filtros.css. Acá solo lo propio de esta vista.
-   Sistema: cálido y editorial — crema, terracota, serif.
-   ========================================================= */
 
 :root {
     /* Heredadas: navbar.css y filtros.css pueden usarlas */

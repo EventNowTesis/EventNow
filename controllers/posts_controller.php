@@ -4,7 +4,7 @@ require_once __DIR__ . '/../models/Posts.php';
 require_once __DIR__ . '/../models/Usuarios.php';
 require_once __DIR__ . '/../models/Notificaciones.php';
 require_once __DIR__ . "/assets/tpl_engine/tpl_engine.php";
-
+require_once __DIR__ . '/../models/Username.php';
 
 if (!isset($_SESSION["id_usuario"])) {
     header("Location: index.php?slug=login");
@@ -16,10 +16,13 @@ if ($_SESSION['rol'] !== 'anfitrion') {
     exit;
 }
 
+if (!usuarioTieneUsername((int) $_SESSION['id_usuario'])) {
+    header('Location: index.php?slug=Configuracionvisitante&aviso=username');
+    exit;
+}
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
 
     $id_usuario = $_SESSION["id_usuario"];
-
 
     $titulo = trim($_POST['titulo'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
@@ -76,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
     $MIN_IMAGENES = 2;
     $MAX_IMAGENES = 6;
     $permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-    $limiteBytes = 5 * 1024 * 1024; // 5 MB por imagen
+    $limiteBytes = 5 * 1024 * 1024;
 
     $archivos = [];
 
@@ -141,13 +144,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
     }
 
     $infoApto = trim($_POST['info_apto'] ?? '');
-    $infoDuracion = trim($_POST['info_duracion'] ?? '');
-    $infoCapacidad = trim($_POST['info_capacidad'] ?? '');
+    $infoDuracion = armarDuracion($_POST['info_duracion_h'] ?? '', $_POST['info_duracion_m'] ?? '');
+    $infoCapacidad = preg_replace('/\D/', '', $_POST['info_capacidad'] ?? '');
     $infoAccesibilidad = trim($_POST['info_accesibilidad'] ?? '');
     $infoMascotas = trim($_POST['info_mascotas'] ?? '');
     $adicion = trim($_POST['adicion'] ?? '');
 
-    //guarda las imagenes en carpeta uploads/1.png
     $carpetaEvento = 'evt_' . str_replace('.', '', uniqid('', true));
     $carpetaUploads = __DIR__ . '/../uploads/';
     $rutaCarpetaEvento = $carpetaUploads . $carpetaEvento . '/';
@@ -171,7 +173,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
         $nombreImagen = ($i + 1) . '.' . $ext;
 
         if (!move_uploaded_file($archivo['tmp_name'], $rutaCarpetaEvento . $nombreImagen)) {
-            // si falla una, borramos lo que ya se había guardado
             array_map('unlink', glob($rutaCarpetaEvento . '*'));
             rmdir($rutaCarpetaEvento);
             echo "Ocurrió un error al subir las imágenes.";
@@ -208,13 +209,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
         'adicion' => $adicion !== '' ? $adicion : null,
     ];
 
-
     $horarios = [];
     $horasPost = $_POST['horario_hora'] ?? [];
     $actividadesPost = $_POST['horario_actividad'] ?? [];
 
     foreach ($actividadesPost as $i => $actividad) {
-        $actividad = trim($actividad);
+        $actividad = capitalizarTexto($actividad);
         if ($actividad === '') {
             continue;
         }
@@ -225,6 +225,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
         ];
     }
 
+    $minutosAnterior = null;
+
+    foreach ($horarios as $fila) {
+        if ($fila['hora'] === '') {
+            continue;
+        }
+
+        if (substr($fila['hora'], 0, 5) < substr($horaEvento, 0, 5)) {
+            array_map('unlink', glob($rutaCarpetaEvento . '*'));
+            rmdir($rutaCarpetaEvento);
+            echo "Los horarios del line-up no pueden ser antes de las " . substr($horaEvento, 0, 5) . ", cuando empieza el evento.";
+            exit;
+        }
+
+        $partes = explode(':', $fila['hora']);
+        $minutos = (int) $partes[0] * 60 + (int) $partes[1];
+
+        if ($minutosAnterior !== null && $minutos < $minutosAnterior + 30) {
+            array_map('unlink', glob($rutaCarpetaEvento . '*'));
+            rmdir($rutaCarpetaEvento);
+            echo "Cada horario del line-up tiene que ser al menos 30 minutos después del anterior.";
+            exit;
+        }
+
+        $minutosAnterior = $minutos;
+    }
 
     $infoExtra = [];
     $clavesPost = $_POST['info_extra_clave'] ?? [];
@@ -242,7 +268,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
         ];
     }
 
-
     $resultado = crearPost(
         $id_usuario,
         $datos,
@@ -251,7 +276,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["btn_publicar"])) {
     );
 
     if (!$resultado) {
-        //si no se guardó en la base, borramos la carpeta con las imágenes
         array_map('unlink', glob($rutaCarpetaEvento . '*'));
         rmdir($rutaCarpetaEvento);
         echo "No se pudo guardar la publicación.";

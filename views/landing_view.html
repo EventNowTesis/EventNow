@@ -9,7 +9,9 @@
     content="Descubrí conciertos, ferias, partidos y propuestas culturales cerca tuyo. Filtrá por barrio, fecha o precio." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500..800;1,500..800&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./public/css/stylesheet.css">
   <link rel="stylesheet" href="./public/css/navbar.css?v=3">
@@ -77,7 +79,15 @@
                 <i class="fa-solid fa-comments"></i>
                 Mensajes
               </a>
-              <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+              <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+                <i class="fa-solid fa-user-check"></i>
+                Siguiendo
+              </a>
+              <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+                <i class="fa-solid fa-user-group"></i>
+                Mis seguidores
+              </a>
+              <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
                 <i class="fa-solid fa-gear"></i>
                 Configuración
               </a>
@@ -91,6 +101,19 @@
                 <i class="fa-solid fa-trash-can"></i>
                 Eliminar mi cuenta
               </button>
+              <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+                <button type="submit" class="dropdown-user-item">
+                  <i class="fa-solid fa-repeat"></i>
+                  Cambiar a modo anfitrión
+                </button>
+              </form>
+
+              <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+                <button type="submit" class="dropdown-user-item">
+                  <i class="fa-solid fa-repeat"></i>
+                  Cambiar a modo cliente
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -132,7 +155,7 @@
         {ZONAS_ACTIVAS} zonas activas
       </span>
       <span class="info-separator">•</span>
-      <span class="info-item">+120 eventos esta semana</span>
+      <span class="info-item">+10 eventos esta semana</span>
       <span class="info-separator">•</span>
       <span class="info-item">Organizadores verificados</span>
     </div>
@@ -205,30 +228,12 @@
 -->
 
 
-          <div class="filter">
-            <select class="filter-control" name="ranking" form="form-filtros">
+          
 
-              <option value="">Todas las puntuaciones</option>
-
-              <option value="5" {RANKING_5}> 5 estrellas </option>
-
-              <option value="4" {RANKING_4}> 4 estrellas o más</option>
-
-              <option value="3" {RANKING_3}>3 estrellas o más</option>
-
-              <option value="2" {RANKING_2}>2 estrellas o más</option>
-
-              <option value="1" {RANKING_1}> 1 estrella o más</option>
-
-            </select>
-          </div>
-
-          <!-- FECHA DESDE -->
           <div class="filter">
             <input type="date" class="filter-control" name="fecha_desde" id="fecha-desde" value="{FECHA_DESDE}">
           </div>
 
-          <!-- FECHA HASTA -->
           <div class="filter">
             <input type="date" class="filter-control" name="fecha_hasta" id="fecha-hasta" value="{FECHA_HASTA}">
           </div>
@@ -253,6 +258,7 @@
         <select class="filter-control" name="orden" form="form-filtros" aria-label="Orden por fecha" id="select-orden">
           <option value="asc" {ORDEN_ASC}>Fecha: ascendente</option>
           <option value="desc" {ORDEN_DESC}>Fecha: descendente</option>
+          <option value="peor" {ORDEN_PEOR}>Peor puntuación</option>
           <option value="ranking" {ORDEN_RANKING}>Mejor puntuación</option>
         </select>
       </div>

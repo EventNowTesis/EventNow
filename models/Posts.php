@@ -3,6 +3,7 @@
 require_once __DIR__ . "/../config.php";
 require_once __DIR__ . "/DBAbstract.php";
 require_once __DIR__ . '/Landing.php';
+require_once __DIR__ . '/Seguimientos.php';
 
 if (!function_exists('e')) {
     function e($valor)
@@ -304,6 +305,10 @@ function obtenerPostConDetalle($id_evento)
     $evento['info_extra'] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     $stmt->close();
 
+    // textos para comparar versiones (revisión del admin)
+    $evento['lineup'] = textoLineupEvento($evento['horario']);
+    $evento['otros_datos'] = textoOtrosDatosEvento($evento['info_extra']);
+
     return $evento;
 }
 
@@ -357,9 +362,7 @@ function prepararDatosEventoDetalle($evento)
     ];
 }
 
-/**
- * Devuelve el <p> de "Organiza ..." o '' si el evento no tiene organizador cargado.
- */
+
 function renderOrganizadorHtml($evento)
 {
     $organizador = $evento['contacto_instagram'] ?: ($evento['contacto_web'] ?: null);
@@ -371,9 +374,7 @@ function renderOrganizadorHtml($evento)
     return '<p class="detail-organizer">Organiza <span>' . e($organizador) . '</span></p>';
 }
 
-/**
- * Devuelve la sección completa de Line-up, o '' si el evento no tiene horario cargado.
- */
+
 function renderLineupSectionHtml($evento)
 {
     if (empty($evento['horario'])) {
@@ -397,9 +398,7 @@ function renderLineupSectionHtml($evento)
         </section>';
 }
 
-/**
- * Devuelve la card de contacto del organizador, o '' si no hay ningún dato de contacto.
- */
+
 function renderContactoSectionHtml($evento)
 {
     $items = '';
@@ -439,7 +438,7 @@ function renderInfoUtilSectionHtml($evento)
     $infoFacts = [
         'Apto'          => $evento['info_apto'] ?? null,
         'Duración'      => $evento['info_duracion'] ?? null,
-        'Capacidad'     => $evento['info_capacidad'] ?? null,
+        'Capacidad de personas'     => $evento['info_capacidad'] ?? null,
         'Accesibilidad' => $evento['info_accesibilidad'] ?? null,
         'Mascotas'      => $evento['info_mascotas'] ?? null,
     ];
@@ -469,9 +468,7 @@ function renderInfoUtilSectionHtml($evento)
         </section>';
 }
 
-/**
- * Devuelve la card de "A tener en cuenta", o '' si el evento no tiene nota cargada.
- */
+
 function renderNotaSectionHtml($evento)
 {
     if (empty($evento['adicion'])) {
@@ -486,9 +483,7 @@ function renderNotaSectionHtml($evento)
 }
 
 
-/**
- * Eventos que el admin tiene que revisar: nuevos, reenviados y modificados.
- */
+
 function getEventosPendientes() {
 
     $db = dbConnect();
@@ -554,9 +549,7 @@ function cambiarEstadoEvento($id_evento, $nuevoEstado) {
 }
 
 
-/**
- * Rechaza un evento SIN borrarlo: pasa a 'rechazado' y guarda el motivo.
- */
+
 function rechazarEvento($id_evento, $motivo) {
     $db = dbConnect();
     $stmt = mysqli_prepare($db, "UPDATE eventos SET estado = 'rechazado', motivo_rechazo = ?, ultimo_cambio = NULL, version_base = NULL WHERE id_evento = ?");
@@ -582,10 +575,7 @@ function getEventosRechazadosDeUsuario($id_usuario) {
 }
 
 
-/**
- * Borrado definitivo. Ya NO se usa para rechazar; queda para cuando el
- * anfitrión elige "Borrar" en su propio panel (eliminar_evento).
- */
+
 function eliminarEventoPorCompleto($id_evento) {
     $db = dbConnect();
 
@@ -754,9 +744,7 @@ function getEventosParaMapa() {
 }
 
 
-/**
- * Crea una notificación (con link opcional) para cada usuario con rol admin.
- */
+
 function notificarAdmins($mensaje, $link = null) {
     $db = dbConnect();
     $res = mysqli_query($db, "SELECT id_usuario FROM users WHERE rol = 'admin'");
@@ -766,14 +754,36 @@ function notificarAdmins($mensaje, $link = null) {
     }
 }
 
-/**
- * Campos del evento que se comparan para detectar cambios.
- */
+
+/* Textos normalizados del line-up y de los otros datos, para poder compararlos entre versiones */
+function textoLineupEvento(array $horarios) {
+    $partes = [];
+    foreach ($horarios as $f) {
+        $hora = substr(trim((string) ($f['hora'] ?? '')), 0, 5);
+        $act  = trim((string) ($f['actividad'] ?? ''));
+        if ($act === '') continue;
+        $partes[] = $hora !== '' ? $hora . ' — ' . $act : $act;
+    }
+    return implode(' · ', $partes);
+}
+
+function textoOtrosDatosEvento(array $infoExtra) {
+    $partes = [];
+    foreach ($infoExtra as $f) {
+        $clave = trim((string) ($f['clave'] ?? ''));
+        $valor = trim((string) ($f['valor'] ?? ''));
+        if ($clave === '' || $valor === '') continue;
+        $partes[] = $clave . ': ' . $valor;
+    }
+    return implode(' · ', $partes);
+}
+
 function camposComparablesEvento() {
     return [
         'titulo', 'descripcion', 'categoria', 'fecha', 'hora', 'zona', 'localidad', 'lat', 'lon',
         'contacto_email', 'contacto_telefono', 'contacto_instagram', 'contacto_web',
         'info_apto', 'info_duracion', 'info_capacidad', 'info_accesibilidad', 'info_mascotas', 'adicion',
+        'lineup', 'otros_datos',
     ];
 }
 
@@ -809,6 +819,11 @@ function registrarModificacionEvento($id_evento, array $viejo, array $nuevo) {
     $base = !empty($fila['version_base']) ? json_decode($fila['version_base'], true) : null;
     if (!is_array($base)) {
         $base = array_intersect_key($viejo, array_flip(camposComparablesEvento()));
+    }
+    foreach (['lineup', 'otros_datos'] as $k) {
+        if (!array_key_exists($k, $base) && array_key_exists($k, $viejo)) {
+            $base[$k] = $viejo[$k];
+        }
     }
 
     $cambiosAcumulados = detectarCambiosEvento($base, $nuevo);
@@ -856,10 +871,14 @@ function detectarCambiosDetallados(array $viejo, array $nuevo) {
         'contacto_instagram' => 'Instagram', 'contacto_web' => 'Web',
         'info_apto' => 'Apto para', 'info_duracion' => 'Duración', 'info_capacidad' => 'Capacidad',
         'info_accesibilidad' => 'Accesibilidad', 'info_mascotas' => 'Mascotas', 'adicion' => 'Nota adicional',
+        'lineup' => 'Line-up', 'otros_datos' => 'Otros datos',
     ];
 
     $filas = [];
     foreach ($etiquetas as $campo => $etiqueta) {
+        // line-up y otros datos solo se comparan si ambas versiones los tienen
+        if (in_array($campo, ['lineup', 'otros_datos'], true)
+            && (!array_key_exists($campo, $viejo) || !array_key_exists($campo, $nuevo))) continue;
         $a = trim((string) ($viejo[$campo] ?? ''));
         $b = trim((string) ($nuevo[$campo] ?? ''));
         if ($campo === 'hora') { $a = substr($a, 0, 5); $b = substr($b, 0, 5); }
@@ -1079,6 +1098,49 @@ function notificarCancelacionEvento($id_evento, $motivo) {
     }
 }
 
+
+function notificarNuevoSeguidor($id_anfitrion, $id_cliente)
+{
+    $db = dbConnect();
+    $stmt = mysqli_prepare($db, "SELECT display_name FROM users WHERE id_usuario = ? LIMIT 1");
+    if (!$stmt) return;
+
+    mysqli_stmt_bind_param($stmt, "i", $id_cliente);
+    mysqli_stmt_execute($stmt);
+    $fila = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+
+    $nombre = $fila['display_name'] ?? 'Alguien';
+
+    crearNotificacion(
+        (int) $id_anfitrion,
+        $nombre . ' empezó a seguirte.',
+        'index.php?slug=misSeguidores'
+    );
+}
+
+function notificarNuevoEventoASeguidores(array $evento)
+{
+    $id_anfitrion = (int) $evento['id_usuario'];
+
+    $db = dbConnect();
+    $stmt = mysqli_prepare($db, "SELECT display_name FROM users WHERE id_usuario = ? LIMIT 1");
+    if (!$stmt) return;
+
+    mysqli_stmt_bind_param($stmt, "i", $id_anfitrion);
+    mysqli_stmt_execute($stmt);
+    $fila = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+    mysqli_stmt_close($stmt);
+
+    $nombre = $fila['display_name'] ?? 'Un anfitrión';
+    $mensaje = $nombre . ' subió un nuevo evento: "' . ($evento['titulo'] ?? '') . '".';
+    $link = "index.php?slug=detalleEvento&id=" . (int) $evento['id_evento'];
+
+    foreach (obtenerSeguidoresAnfitrion($id_anfitrion) as $seguidor) {
+        crearNotificacion((int) $seguidor['id_usuario'], $mensaje, $link);
+    }
+}
+
 function consumirCambiosNotificacion($id_notificacion, $id_usuario, $id_evento) {
     $db = dbConnect();
 
@@ -1210,4 +1272,41 @@ function renderPanelRevisionHtml(array $evento, array $anfitrion = [], $flash = 
     </section>';
 }
 
+function capitalizarTexto($texto)
+{
+    $texto = mb_strtolower(trim((string) $texto), 'UTF-8');
+
+    return mb_strtoupper(mb_substr($texto, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($texto, 1, null, 'UTF-8');
+}
+
+function armarDuracion($horas, $minutos)
+{
+    $h = min(99, (int) preg_replace('/\D/', '', (string) $horas));
+    $m = min(59, (int) preg_replace('/\D/', '', (string) $minutos));
+
+    $partes = [];
+    if ($h > 0) {
+        $partes[] = $h . ' h';
+    }
+    if ($m > 0) {
+        $partes[] = $m . ' min';
+    }
+
+    return implode(' ', $partes);
+}
+
+function separarDuracion($texto)
+{
+    $h = '';
+    $m = '';
+
+    if (preg_match('/(\d+)\s*h/i', (string) $texto, $r)) {
+        $h = $r[1];
+    }
+    if (preg_match('/(\d+)\s*min/i', (string) $texto, $r)) {
+        $m = $r[1];
+    }
+
+    return [$h, $m];
+}
 ?>

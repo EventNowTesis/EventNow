@@ -1,12 +1,7 @@
 <?php
 require_once __DIR__ . "/DBAbstract.php";
 
-/**
- * Busca o crea un chat.
- * - Con $id_evento: chat ligado a ese evento (cliente + anfitrión).
- * - Con $id_evento === null: chat directo entre dos usuarios (desde el perfil).
- *   En ese caso se busca en ambos sentidos para no duplicar la conversación.
- */
+
 function obtenerOCrearChat($id_evento, $id_cliente, $id_anfitrion) {
     $db = dbConnect();
 
@@ -71,11 +66,7 @@ function enviarMensaje($id_chat, $id_remitente, $texto) {
     return $exito;
 }
 
-/**
- * Trae los chats del usuario, con la cantidad de mensajes no leídos
- * de CADA chat (para mostrar el badge estilo WhatsApp en la lista).
- * LEFT JOIN con eventos para no perder los chats directos (sin evento).
- */
+
 function obtenerChatsUsuario($id_usuario) {
     $db = dbConnect();
     $sql = "SELECT c.*, e.titulo AS nombre_evento,
@@ -116,10 +107,7 @@ function obtenerMensajesChat($id_chat) {
     return $mensajes;
 }
 
-/**
- * Cantidad total de mensajes no leídos del usuario (todos sus chats activos).
- * Usada para el badge numérico en el panel (tipo WhatsApp).
- */
+
 function contarMensajesNoLeidos($id_usuario, $rol) {
     $db = dbConnect();
     if ($rol === 'anfitrion' || $rol === 'admin') {

@@ -881,3 +881,23 @@ body {
         transition: none !important;
     }
 }
+/* Duración con horas y minutos */
+.pub-page .duracion-campos {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pub-page .duracion-campos input[type="text"] {
+    width: 72px;
+    flex: 0 0 72px;
+    text-align: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.pub-page .duracion-campos span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+}

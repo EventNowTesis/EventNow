@@ -52,9 +52,6 @@ if ($cantMsgsNoLeidos > 0) {
 }
 
 
-/* =========================================================
-   OBTENER MIS EVENTOS
-   ========================================================= */
 
 $db = dbConnect();
 
@@ -74,9 +71,6 @@ $todosMisEventos = mysqli_fetch_all($resultado, MYSQLI_ASSOC);
 mysqli_stmt_close($stmt);
 
 
-/* =========================================================
-   FILTROS (vienen por GET)
-   ========================================================= */
 
 $fBuscar    = trim($_GET['q'] ?? '');
 $fCategoria = $_GET['categoria'] ?? '';
@@ -113,14 +107,15 @@ sort($categorias);
 sort($zonas);
 
 
-function armarOpciones($valores, $seleccionado, $textoTodos)
+function armarOpciones($valores, $seleccionado, $textoTodos, $capitalizar = false)
 {
     $html = "<option value=''>" . $textoTodos . "</option>";
 
     foreach ($valores as $valor) {
         $sel = ($valor === $seleccionado) ? " selected" : "";
         $v = htmlspecialchars($valor, ENT_QUOTES);
-        $html .= "<option value='" . $v . "'" . $sel . ">" . $v . "</option>";
+        $texto = $capitalizar ? htmlspecialchars(mb_strtoupper(mb_substr($valor, 0, 1)) . mb_substr($valor, 1), ENT_QUOTES) : $v;
+        $html .= "<option value='" . $v . "'" . $sel . ">" . $texto . "</option>";
     }
 
     return $html;
@@ -152,18 +147,12 @@ foreach ($todosMisEventos as $ev) {
 }
 
 
-/* =========================================================
-   CONTENEDORES
-   ========================================================= */
 
 $htmlEventos = "";
 
 $hoy = date('Y-m-d');
 
 
-/* =========================================================
-   RECORRER EVENTOS
-   ========================================================= */
 
 foreach ($eventosFiltrados as $evento) {
 
@@ -172,7 +161,6 @@ foreach ($eventosFiltrados as $evento) {
     $idEvento = (int) $evento['id_evento'];
 
 
-    /* ---------- Estado ---------- */
 
     $claseEstado = 'estado-borrador';
     $textoEstado = ucfirst($estado);
@@ -195,7 +183,6 @@ foreach ($eventosFiltrados as $evento) {
     }
 
 
-    /* ---------- Imagen ---------- */
 
     $titulo = htmlspecialchars($evento['titulo'] ?? '', ENT_QUOTES, 'UTF-8');
 
@@ -206,7 +193,6 @@ foreach ($eventosFiltrados as $evento) {
     }
 
 
-    /* ---------- Fecha, hora y lugar ---------- */
 
     $htmlHora = '';
 
@@ -218,7 +204,6 @@ foreach ($eventosFiltrados as $evento) {
     if ($lugar === '') $lugar = $evento['zona'] ?? '';
 
 
-    /* ---------- Avisos (rechazo / cancelación) ---------- */
 
     $bloqueAviso = '';
     $textoEditar = 'Editar evento';
@@ -247,8 +232,6 @@ foreach ($eventosFiltrados as $evento) {
     }
 
 
-    /* ---------- Botones ---------- */
-
     if ($estado === 'cancelado') {
 
         $botones = '<a href="index.php?slug=' . $slugDetalle . '&id=' . $idEvento . '" class="btn-editar"> Ver detalle</a>';
@@ -265,7 +248,6 @@ foreach ($eventosFiltrados as $evento) {
     }
 
 
-    /* ---------- Tarjeta ---------- */
 
     $htmlEventos .= '
         <article class="evento">
@@ -284,18 +266,11 @@ foreach ($eventosFiltrados as $evento) {
 }
 
 
-/* =========================================================
-   SI NO HAY EVENTOS
-   ========================================================= */
-
 if ($htmlEventos === "") {
     $htmlEventos = '<div class="empty-state"><i class="fa-regular fa-calendar-xmark"></i><h3>No se encontraron eventos</h3><p>Probá con otros filtros o creá un evento nuevo.</p></div>';
 }
 
 
-/* =========================================================
-   TEMPLATE
-   ========================================================= */
 
 $tpl = loadTPL("panel", "Panel");
 
@@ -306,7 +281,7 @@ $tpl = setVarTPL("USUARIO_EMAIL", htmlspecialchars($usuario['email'] ?? ''), $tp
 $tpl = setVarTPL("USUARIO_USERNAME", htmlspecialchars($usuario['nombre_usuario'] ?? ''), $tpl);
 
 $tpl = setVarTPL("FILTRO_Q", htmlspecialchars($fBuscar, ENT_QUOTES), $tpl);
-$tpl = setVarTPL("OPCIONES_CATEGORIA", armarOpciones($categorias, $fCategoria, "Todas las categorías"), $tpl);
+$tpl = setVarTPL("OPCIONES_CATEGORIA", armarOpciones($categorias, $fCategoria, "Todas las categorías", true), $tpl);
 $tpl = setVarTPL("OPCIONES_ZONA", armarOpciones($zonas, $fZona, "Todas las localidades"), $tpl);
 
 $opcionesEstado = "<option value=''>Todos los estados</option>";

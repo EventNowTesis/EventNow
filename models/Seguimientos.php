@@ -1,7 +1,7 @@
-
 <?php
 
 require_once __DIR__ . '/DBAbstract.php';
+require_once __DIR__ . '/Posts.php';
 
 function clienteSigueAnfitrion($id_cliente, $id_anfitrion)
 {
@@ -49,7 +49,6 @@ function seguirAnfitrion($id_cliente, $id_anfitrion)
     }
 
     $db = dbConnect();
-
 
     $sql = "SELECT id_usuario
             FROM users
@@ -102,10 +101,9 @@ function seguirAnfitrion($id_cliente, $id_anfitrion)
     }
 
     //INSERT IGNORE es para evitar que siga dos veces a la misma persona
-
     $sql = "INSERT IGNORE INTO seguimientos
-            (id_cliente, id_anfitrion)
-            VALUES (?, ?)";
+            (id_cliente, id_anfitrion, fecha_seguimiento)
+            VALUES (?, ?, NOW())";
 
     $stmt = mysqli_prepare($db, $sql);
 
@@ -122,7 +120,14 @@ function seguirAnfitrion($id_cliente, $id_anfitrion)
 
     $ok = mysqli_stmt_execute($stmt);
 
+    //si el INSERT IGNORE no insertó nada (ya lo seguía)
+    $esNuevo = $ok && mysqli_stmt_affected_rows($stmt) === 1;
+
     mysqli_stmt_close($stmt);
+
+    if ($esNuevo) {
+        notificarNuevoSeguidor($id_anfitrion, $id_cliente);
+    }
 
     return $ok;
 }

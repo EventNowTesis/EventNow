@@ -110,7 +110,7 @@ if ($contactoItems !== '') {
 $infoFacts = [
     'Apto'           => $evento['info_apto'] ?? null,
     'Duración'       => $evento['info_duracion'] ?? null,
-    'Capacidad'      => $evento['info_capacidad'] ?? null,
+    'Capacidad de personas'      => $evento['info_capacidad'] ?? null,
     'Accesibilidad'  => $evento['info_accesibilidad'] ?? null,
     'Mascotas'       => $evento['info_mascotas'] ?? null,
 ];

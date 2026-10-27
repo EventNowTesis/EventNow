@@ -21,23 +21,21 @@
   background: var(--cream-soft, #f5eee3); /* relleno si no hay imagen de fondo */
 }
 
-/* Relleno: la misma foto, agrandada y desenfocada, detrás */
-.carousel-slide::before {
-  content: "";
-  position: absolute;
-  inset: -24px;
-  background-image: var(--slide-bg, none);
-  background-size: cover;
-  background-position: center;
-  filter: blur(22px);
-}
-
-/* La foto completa, sin recortar, dentro del mismo contenedor */
 .carousel-slide img {
   position: relative;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.carousel-slide img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
 }
 
@@ -200,7 +198,7 @@
   position: relative;
   z-index: 0;
 }
-.detail-address { margin: 12px 0 0; }
+.detail-address { margin: 12px 0 16px; }
 
 /* ---------- Sidebar ---------- */
 .detail-grid { grid-template-columns: 1fr 300px; gap: 36px; }
@@ -1035,3 +1033,5 @@ body.es-admin .card-contacto-organizador {
 }
 .detail-fav:hover { color: var(--rust, #a8432f); border-color: var(--rust, #a8432f); }
 .detail-fav.active i { font-weight: 900; color: var(--rust, #a8432f); }
+.detail-facts li > :first-child { flex-shrink: 0; }
+.detail-facts li > :last-child { text-align: right; margin-left: auto; }

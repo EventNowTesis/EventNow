@@ -59,9 +59,7 @@
                         </ul>
                     </div>
                 </div>
-                <a href="index.php?slug=publicacionesSiguiendo">
-                        Eventos de los que sigo
-                    </a>
+
                 <div class="user-menu-wrapper" onclick="this.classList.toggle('active')">
                     <div class="user-profile">
                         <div class="user-profile-avatar">
@@ -80,7 +78,15 @@
                             <i class="fa-solid fa-comments"></i>
                             Mensajes
                         </a>
-                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item menu-solo-visitante">
+                        <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+                            <i class="fa-solid fa-user-check"></i>
+                            Siguiendo
+                        </a>
+                        <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+                            <i class="fa-solid fa-user-group"></i>
+                            Mis seguidores
+                        </a>
+                        <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
                             <i class="fa-solid fa-gear"></i>
                             Configuración
                         </a>
@@ -94,14 +100,18 @@
                             <i class="fa-solid fa-trash-can"></i>
                             Eliminar mi cuenta
                         </button>
-
-                        <form action="index.php?slug=cambiarRol" method="POST">
-
-                        <button type="submit" class="dropdown-user-item">
-                            <i class="fa-solid fa-repeat"></i>
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
                                 Cambiar a modo anfitrión
-                        </button>
+                            </button>
+                        </form>
 
+                        <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+                            <button type="submit" class="dropdown-user-item">
+                                <i class="fa-solid fa-repeat"></i>
+                                Cambiar a modo cliente
+                            </button>
                         </form>
 
 

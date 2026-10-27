@@ -1,0 +1,311 @@
+/* =========================================================
+   EventNow — Siguiendo
+   Se carga después de navbar.css
+   ========================================================= */
+
+:root {
+  --cream: #fbf7f1;
+  --rust-tint-soft: #faeee7;
+}
+
+html {
+  background-color: var(--cream);
+  background-image: linear-gradient(180deg, var(--rust-tint-soft) 0, var(--cream) 360px);
+  background-repeat: no-repeat;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: var(--nav-text);
+}
+
+body {
+  background: transparent;
+}
+
+/* ---------------------------------------------------------
+   Encabezado
+--------------------------------------------------------- */
+.siguiendo-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 64px 20px 80px;
+  font-family: "Plus Jakarta Sans", -apple-system, "Segoe UI", Arial, sans-serif;
+  color: var(--nav-text);
+}
+
+.siguiendo-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--nav-accent);
+}
+
+.siguiendo-eyebrow i {
+  font-size: 12px;
+}
+
+.siguiendo-titulo {
+  margin: 14px 0 10px;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: 2.8rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--nav-text);
+}
+
+.siguiendo-subtitulo {
+  margin: 0 0 44px;
+  font-size: 15px;
+  color: var(--nav-text-muted);
+}
+
+/* ---------------------------------------------------------
+   Barra: contador + buscador
+--------------------------------------------------------- */
+.siguiendo-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--nav-border-strong);
+}
+
+.siguiendo-resumen {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.siguiendo-resumen h2 {
+  margin: 0;
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--nav-text);
+}
+
+.siguiendo-resumen span {
+  font-size: 13px;
+  color: var(--nav-text-muted);
+}
+
+.siguiendo-buscador {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 288px;
+  max-width: 100%;
+  padding: 0 16px;
+  height: 44px;
+  background: var(--nav-surface);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--nav-radius);
+  color: var(--nav-text-muted);
+  transition: border-color 0.15s ease;
+}
+
+.siguiendo-buscador:focus-within {
+  border-color: var(--nav-border-strong);
+}
+
+.siguiendo-buscador input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 13.5px;
+  color: var(--nav-text);
+}
+
+.siguiendo-buscador input::placeholder {
+  color: var(--nav-text-muted);
+}
+
+/* ---------------------------------------------------------
+   Tarjeta de anfitrión
+--------------------------------------------------------- */
+.siguiendo-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.seguido-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 32px;
+  background: var(--nav-surface);
+  border: 1px solid var(--nav-border);
+  border-radius: var(--nav-radius);
+}
+
+.seguido-card[hidden] {
+  display: none;
+}
+
+.seguido-avatar {
+  width: 86px;
+  height: 86px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f1e8de;
+  color: var(--nav-accent);
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.seguido-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.seguido-rol {
+  font-size: 12.5px;
+  color: var(--nav-text-muted);
+}
+
+.seguido-nombre {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: 1.7rem;
+  line-height: 1.2;
+  color: var(--nav-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seguido-estado {
+  margin-top: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--nav-accent);
+}
+
+.seguido-estado i {
+  font-size: 11px;
+}
+
+/* ---------------------------------------------------------
+   Botones
+--------------------------------------------------------- */
+.seguido-acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.seguido-form {
+  margin: 0;
+}
+
+.btn-dejar-seguir,
+.btn-ver-perfil {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: var(--nav-radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-dejar-seguir {
+  background: var(--nav-surface);
+  border: 1px solid var(--nav-border-strong);
+  color: var(--nav-text);
+}
+
+.btn-dejar-seguir:hover {
+  background: var(--nav-accent-tint);
+  border-color: var(--nav-accent-tint-strong);
+  color: var(--nav-accent-dark);
+}
+
+.btn-ver-perfil {
+  background: var(--nav-accent);
+  border: 1px solid var(--nav-accent);
+  color: #fff;
+}
+
+.btn-ver-perfil:hover {
+  background: var(--nav-accent-dark);
+  border-color: var(--nav-accent-dark);
+}
+
+.btn-ver-perfil i,
+.btn-dejar-seguir i {
+  font-size: 12px;
+}
+
+/* ---------------------------------------------------------
+   Estado vacío
+--------------------------------------------------------- */
+.siguiendo-vacio {
+  padding: 32px;
+  text-align: center;
+  color: var(--nav-text-muted);
+  background: var(--nav-surface);
+  border: 1px dashed var(--nav-border-strong);
+  border-radius: var(--nav-radius);
+}
+
+/* ---------------------------------------------------------
+   Celular
+--------------------------------------------------------- */
+@media (max-width: 720px) {
+  .siguiendo-page { padding: 36px 16px 56px; }
+  .siguiendo-titulo { font-size: 2rem; }
+  .siguiendo-subtitulo { margin-bottom: 28px; }
+  .siguiendo-buscador { width: 100%; }
+
+  .seguido-card {
+    flex-wrap: wrap;
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .seguido-avatar { width: 64px; height: 64px; font-size: 1.5rem; }
+  .seguido-nombre { font-size: 1.35rem; }
+
+  .seguido-acciones {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .seguido-form,
+  .btn-ver-perfil { flex: 1; }
+
+  .btn-dejar-seguir { width: 100%; }
+}

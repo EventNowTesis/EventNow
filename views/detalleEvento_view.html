@@ -44,7 +44,7 @@
         <a href="index.php?slug=landing">Eventos</a>
         <a href="index.php?slug=posts" class="menu-solo-anfitrion">Crear evento</a>
         <a href="index.php?slug=mapa" class="menu-no-anfitrion">Mapa</a>
-        <a href="index.php?slug=panelAdmin#seccion-usuarios" class="menu-solo-admin">Ver usuarios</a>
+        <a href="index.php?slug=panelAdmin" class="menu-solo-admin">Volver al panel</a>
         <a href="index.php?slug=logout" class="menu-solo-admin"
           onclick="return confirm('¿Seguro que querés cerrar sesión?');">Cerrar sesión</a>
       </div>
@@ -82,7 +82,15 @@
               <i class="fa-solid fa-comments"></i>
               Mensajes
             </a>
-            <a href="index.php?slug=configuracionVisitante" class="dropdown-user-item menu-solo-visitante">
+            <a href="index.php?slug=publicacionesSiguiendo" class="dropdown-user-item menu-solo-visitante">
+              <i class="fa-solid fa-user-check"></i>
+              Siguiendo
+            </a>
+            <a href="index.php?slug=misSeguidores" class="dropdown-user-item menu-solo-anfitrion">
+              <i class="fa-solid fa-user-group"></i>
+              Mis seguidores
+            </a>
+            <a href="index.php?slug=Configuracionvisitante" class="dropdown-user-item">
               <i class="fa-solid fa-gear"></i>
               Configuración
             </a>
@@ -96,6 +104,19 @@
               <i class="fa-solid fa-trash-can"></i>
               Eliminar mi cuenta
             </button>
+            <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-visitante">
+              <button type="submit" class="dropdown-user-item">
+                <i class="fa-solid fa-repeat"></i>
+                Cambiar a modo anfitrión
+              </button>
+            </form>
+
+            <form action="index.php?slug=cambiarRol" method="POST" class="menu-solo-anfitrion">
+              <button type="submit" class="dropdown-user-item">
+                <i class="fa-solid fa-repeat"></i>
+                Cambiar a modo cliente
+              </button>
+            </form>
           </div>
         </div>
 
@@ -108,7 +129,6 @@
 
     {PANEL_REVISION_HTML}
 
-    <!-- MIGAS DE PAN -->
     <div class="detail-breadcrumb">
       <a href="index.php?slug=landing"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Eventos</a>
       <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
@@ -255,7 +275,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="public/js/detalleEvento.js?v=2"></script>
   <script src="public/js/toast.js"></script>
-<script src="public/js/custom-select.js"></script>
+  <script src="public/js/custom-select.js"></script>
   <script src="public/js/navbar.js"></script>
 </body>
 

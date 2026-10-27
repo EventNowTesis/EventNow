@@ -70,9 +70,6 @@ if (substr($fila['fecha'], 0, 10) < date('Y-m-d')) {
 }
 
 
-/* ---------------------------------------
-   Cambiar asistencia
---------------------------------------- */
 
 $resultado = toggleAsistenciaUsuario(
     $idUsuario,

@@ -154,7 +154,6 @@ if ($totalFavoritos === 0) {
 $sinResultadosHidden = ($totalFavoritos > 0 && $totalFiltrados === 0) ? '' : 'hidden';
 
 
-/* Opciones de los selects (con el seleccionado marcado) */
 
 $opcionesCategoria = ['' => 'Todas las categorías'] + $categoriasPermitidas;
 
@@ -187,7 +186,6 @@ $tpl = setVarTPL("MSG_UBICACION", $msgUbicacion, $tpl);
 $tpl = setVarTPL("FAVORITOS", $htmlFavoritos, $tpl);
 $tpl = setVarTPL("CALENDARIO", $htmlCalendario, $tpl);
 
-/* Filtros de favoritos */
 
 $tpl = setVarTPL("BUSQUEDA", htmlspecialchars($buscar, ENT_QUOTES, 'UTF-8'), $tpl);
 $tpl = setVarTPL("OPCIONES_CATEGORIA", armarOpcionesSelect($opcionesCategoria, $categoria), $tpl);

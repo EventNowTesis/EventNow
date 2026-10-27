@@ -37,9 +37,6 @@ a {
   text-decoration: none;
 }
 
-/* =========================================================
-   LAYOUT PRINCIPAL DIVIDIDO EN 2 COLUMNAS
-   ========================================================= */
 
 .login-layout {
   display: grid;
@@ -343,4 +340,39 @@ input:focus {
   justify-content: flex-end;
   gap: 16px;
   opacity: 0.7;
+}
+.form-reenviar {
+  display: block;
+  margin: 12px 0 0;
+}
+
+.btn-reenviar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #fff;
+  border: 1px solid var(--rust, #a8462e);
+  border-radius: 999px;
+  color: var(--rust, #a8462e);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.btn-reenviar:hover {
+  background: var(--rust, #a8462e);
+  color: #fff;
+}
+
+.btn-reenviar:focus-visible {
+  outline: 2px solid var(--rust, #a8462e);
+  outline-offset: 2px;
+}
+
+.btn-reenviar i {
+  font-size: 12px;
 }
