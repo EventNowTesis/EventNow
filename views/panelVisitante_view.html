@@ -45,7 +45,6 @@
             </div>
 
             <div class="navbar-actions">
-                <!-- NOTIFICACIONES -->
                 <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -191,7 +190,6 @@
 
         </section>
 
-        <!-- ============ FAVORITOS ============ -->
         <section id="favoritos" class="contenido activo">
             <div class="eventos-header">
                 <div>
@@ -201,8 +199,6 @@
                 </div>
             </div>
 
-            <!-- Buscador + filtros: mismos que el landing (form GET, filtra el servidor).
-                 filtros.js los envía por AJAX y reemplaza solo #resultados-favoritos -->
             <div class="filters-box" id="filtros-favoritos">
                 <form method="GET" action="index.php" id="form-filtros-favoritos"
                     data-ajax-destino="#resultados-favoritos">
@@ -239,13 +235,15 @@
                         </div>
 
                         <div class="filter">
-                            <input type="date" class="filter-control" name="fecha_desde" value="{FECHA_DESDE}"
-                                aria-label="Fecha desde" title="Fecha desde">
+                            <label class="filter-label" for="fecha-desde">Desde</label>
+                            <input type="date" class="filter-control" name="fecha_desde" id="fecha-desde"
+                                value="{FECHA_DESDE}">
                         </div>
 
                         <div class="filter">
-                            <input type="date" class="filter-control" name="fecha_hasta" value="{FECHA_HASTA}"
-                                aria-label="Fecha hasta" title="Fecha hasta">
+                            <label class="filter-label" for="fecha-hasta">Hasta</label>
+                            <input type="date" class="filter-control" name="fecha_hasta" id="fecha-hasta"
+                                value="{FECHA_HASTA}">
                         </div>
                     </div>
                 </form>
@@ -255,7 +253,6 @@
                 </div>
             </div>
 
-            <!-- Todo lo que cambia al filtrar -->
             <div id="resultados-favoritos">
 
                 <p class="event-counter">
@@ -276,7 +273,6 @@
             </div>
         </section>
 
-        <!-- ============ CALENDARIO ============ -->
         <section id="calendario" class="contenido">
             <div class="eventos-header">
                 <div>

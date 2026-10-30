@@ -451,7 +451,6 @@ function cambiarRolUsuario($id_usuario, $nuevo_rol)
 }
 
 
-// ---------- Verificación de email ----------
 
 function guardarTokenVerificacion($email, $hashToken)
 {

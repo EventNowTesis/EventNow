@@ -45,7 +45,6 @@
             </div>
 
             <div class="navbar-actions">
-                <!-- NOTIFICACIONES -->
                 <div class="notification-wrapper" onclick="toggleNotificaciones(this)">
                     <div class="notification-icon">
                         <i class="fa-solid fa-bell"></i>
@@ -204,13 +203,13 @@
                 </div>
 
                 <div class="filter">
-                    <input type="date" name="desde" id="fecha-desde" class="filter-control" value="{FILTRO_DESDE}"
-                        aria-label="Fecha desde" title="Desde">
+                    <label class="filter-label" for="fecha-desde">Desde</label>
+                    <input type="date" class="filter-control" name="fecha_desde" id="fecha-desde" value="{FECHA_DESDE}">
                 </div>
 
                 <div class="filter">
-                    <input type="date" name="hasta" id="fecha-hasta" class="filter-control" value="{FILTRO_HASTA}"
-                        aria-label="Fecha hasta" title="Hasta">
+                    <label class="filter-label" for="fecha-hasta">Hasta</label>
+                    <input type="date" class="filter-control" name="fecha_hasta" id="fecha-hasta" value="{FECHA_HASTA}">
                 </div>
 
             </div>
@@ -221,7 +220,6 @@
             </div>
         </form>
 
-        <!-- Se actualiza al filtrar -->
         <div id="resultados">
             <div class="eventos">
                 {EVENTOS}

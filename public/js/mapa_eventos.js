@@ -5,13 +5,13 @@
   var DETALLE_SLUG = "index.php?slug=detalleEvento&id="; 
 
   var CAT_META = {
-    musica:      { label: "Música",       color: "#a8462e" },
-    deporte:     { label: "Deportes",     color: "#33628c" },
-    feria:       { label: "Ferias",       color: "#3f7a55" },
-    arte:        { label: "Arte",         color: "#7a4d8f" },
-    gastronomia: { label: "Gastronomía",  color: "#b3722f" },
-    tecnologia:  { label: "Tecnología",   color: "#4a6fa5" },
-    otro:        { label: "Otro",         color: "#766e63" }
+    Musica:      { label: "Música",       color: "#a8462e" },
+    Deporte:     { label: "Deportes",     color: "#33628c" },
+    Feria:       { label: "Ferias",       color: "#3f7a55" },
+    Arte:        { label: "Arte",         color: "#7a4d8f" },
+    Gastronomia: { label: "Gastronomía",  color: "#b3722f" },
+    Tecnologia:  { label: "Tecnología",   color: "#4a6fa5" },
+    Otro:        { label: "Otro",         color: "#766e63" }
   };
 
   function catMeta(cat) {

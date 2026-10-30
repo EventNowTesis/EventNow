@@ -901,3 +901,18 @@ body {
     font-weight: 600;
     color: var(--ink-soft);
 }
+/* Line-up: el cartel "Hora" solo se ve en celular */
+@media (max-width: 560px) {
+    .pub-page .fila-dinamica.fila-horario::before {
+        content: "Hora";
+        grid-column: 1 / -1;
+        margin-bottom: -4px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink-soft);
+    }
+
+    .pub-page input[type="time"] {
+        min-height: 44px;
+    }
+}

@@ -15,7 +15,6 @@ if (inputFecha) {
 
     inputFecha.min = hoyStr;
 
-    //si venía con una fecha ya vencida la reseteamos para forzar a elegir una válida
     if (inputFecha.value && inputFecha.value < hoyStr) {
         inputFecha.value = '';
     }
@@ -87,14 +86,13 @@ function actualizarPreview() {
     el.addEventListener('change', actualizarPreview);
 });
 
-
 setInterval(actualizarPreview, 600);
 
 const MIN_IMAGENES = 2;
 const MAX_IMAGENES = 6;
 
-let imagenes = [];      
-let indiceActual = 0;   
+let imagenes = [];
+let indiceActual = 0;
 
 function sincronizarInput() {
     const dt = new DataTransfer();
@@ -166,7 +164,6 @@ function mostrarCarrusel() {
     contador.textContent = (indiceActual + 1) + ' / ' + imagenes.length;
     carrusel.appendChild(contador);
 
-    // aviso si todavía no llega al mínimo
     if (imagenes.length < MIN_IMAGENES) {
         const aviso = document.createElement('p');
         aviso.className = 'carrusel-aviso';
@@ -187,7 +184,6 @@ function agregarArchivos(lista) {
             alert('Podés subir hasta ' + MAX_IMAGENES + ' imágenes.');
             return;
         }
-        // evitar repetidas
         const repetida = imagenes.some(function (i) {
             return i.name === archivo.name && i.size === archivo.size;
         });
@@ -196,7 +192,7 @@ function agregarArchivos(lista) {
         }
     });
 
-    indiceActual = imagenes.length - 1; 
+    indiceActual = imagenes.length - 1;
     sincronizarInput();
     mostrarCarrusel();
 }
@@ -251,7 +247,7 @@ const estadoUbicacion = document.getElementById('estado-ubicacion');
 
 if (inputUbicacion) {
     inputUbicacion.addEventListener('input', ajustarAlturaUbicacion);
-    ajustarAlturaUbicacion(); //por si ya viene con una dirección cargada (editar evento)
+    ajustarAlturaUbicacion();
 }
 
 if (btnGeo) {
@@ -303,6 +299,53 @@ if (btnGeo) {
     });
 }
 
+const listaHorarios = document.getElementById('lista-horarios');
+
+function validarLineup() {
+    if (!listaHorarios) return;
+
+    let anterior = null;
+
+    listaHorarios.querySelectorAll('.fila-dinamica').forEach(function (fila) {
+        const inputHora = fila.querySelector('input[type="time"]');
+        const inputActividad = fila.querySelector('input[type="text"]');
+        if (!inputHora) return;
+
+        inputHora.setCustomValidity('');
+
+        if (!inputActividad || inputActividad.value.trim() === '' || inputHora.value === '') return;
+
+        const partes = inputHora.value.split(':');
+        const minutos = Number(partes[0]) * 60 + Number(partes[1]);
+
+        if (campoHora && campoHora.value && inputHora.value < campoHora.value) {
+            inputHora.setCustomValidity('No puede ser antes de las ' + campoHora.value + ', cuando empieza el evento.');
+        } else if (anterior !== null && minutos < anterior.minutos + 30) {
+            inputHora.setCustomValidity('Tiene que ser al menos 30 minutos después de las ' + anterior.texto + '.');
+        }
+
+        anterior = { minutos: minutos, texto: inputHora.value };
+    });
+}
+
+if (listaHorarios) {
+    listaHorarios.addEventListener('input', validarLineup);
+    listaHorarios.addEventListener('change', validarLineup);
+}
+
+if (campoHora) {
+    ['input', 'change'].forEach(function (n) {
+        campoHora.addEventListener(n, validarLineup);
+    });
+}
+
+if (formEvento) {
+    const btnPublicar = formEvento.querySelector('[type="submit"]');
+    if (btnPublicar) btnPublicar.addEventListener('click', validarLineup);
+}
+
+validarLineup();
+
 function agregarFila(idLista, idTemplate) {
     const lista = document.getElementById(idLista);
     const tpl = document.getElementById(idTemplate);
@@ -319,4 +362,5 @@ function agregarInfoExtra() {
 
 function quitarFila(boton) {
     boton.closest('.fila-dinamica').remove();
+    validarLineup();
 }

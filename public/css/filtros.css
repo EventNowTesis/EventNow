@@ -278,3 +278,34 @@
 
 /* Oculta una sección (la usa el panel al filtrar por estado) */
 .oculto { display: none; }
+
+
+/* ---------------------------------------------------------
+   Campo de fecha (que el celular dibuje el dd/mm/aaaa)
+--------------------------------------------------------- */
+.filter input[type="date"].filter-control {
+  -webkit-appearance: auto;
+  appearance: auto;
+  display: block;
+  min-height: 44px;
+  color: var(--ink);
+  background-color: var(--surface);
+}
+
+
+/* ---------------------------------------------------------
+   Etiquetas "Desde" / "Hasta": solo se ven en celular
+--------------------------------------------------------- */
+.filter-label {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .filter-label {
+    display: block;
+    margin: 0 0 4px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-soft);
+  }
+}
